@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
     bio = models.TextField(max_length=500, blank=True)
     YEAR_IN_SCHOOL_CHOICES = [
         ('FR', 'Freshman'),
@@ -12,11 +12,21 @@ class Profile(models.Model):
         ('JR', 'Junior'),
         ('SR', 'Senior'),
         ('GR', 'Graduate'),
-        ]
+    ]
     year_in_school = models.CharField(
         max_length=2,
         choices=YEAR_IN_SCHOOL_CHOICES,
         default='FR',
+    )
+    GROUP_CHOICES = [
+        ('SH', 'Short Sprints'),
+        ('LO', 'Long Sprints'),
+        ('DI', 'Distance Scrubs'),
+    ]
+    group = models.CharField(
+        max_length=2,
+        choices=GROUP_CHOICES,
+        default='LO',
     )
 
 class Workout(models.Model):
