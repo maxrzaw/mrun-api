@@ -13,7 +13,7 @@ class User(AbstractUser):
         ('SR', 'Senior'),
         ('GR', 'Graduate'),
     ]
-    year_in_school = models.CharField(
+    year = models.CharField(
         max_length=2,
         choices=YEAR_IN_SCHOOL_CHOICES,
         default='FR',
@@ -53,4 +53,4 @@ class Workout(models.Model):
         default=TRACK)
 
 class Activity(models.Model):
-    athlete = models.ForeignKey('auth.User', on_delete=models.CASCADE, )
+    athlete = models.ForeignKey('api.User', on_delete=models.CASCADE, )
