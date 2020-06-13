@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api.apps.ApiConfig',
+    'MRun_Alpha.api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -131,4 +131,4 @@ REST_FRAMEWORK = {
 }
 
 # My changes
-#AUTH_USER_MODEL = 'api.User'
+AUTH_USER_MODEL = 'MRun_Alpha.api.User'
