@@ -18,21 +18,21 @@ class User(AbstractUser):
         choices=YEAR_IN_SCHOOL_CHOICES,
         default='FR',
     )
-    GROUP_CHOICES = [
-        ('SH', 'Short Sprints'),
-        ('LO', 'Long Sprints'),
-        ('DI', 'Distance Scrubs'),
-    ]
-    group = models.CharField(
-        max_length=2,
-        choices=GROUP_CHOICES,
-        default='LO',
-    )
+    
+
+class Group(models.Model):
+    name = models.CharField(max_length=100, blank=False)
+    description = models.TextField()
+
+class Memberships(models.Model):
+    user = models.ForeignKey('api.User', on_delete=models.CASCADE)
+    group = models.ForeignKey('api.Group', on_delete=models.CASCADE)
 
 class Workout(models.Model):
     workout_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
+    creator = models.ForeignKey('api.User', on_delete=models.DO_NOTHING, null=True)
 
     HILL = 'H'
     CORE = 'C'
@@ -53,4 +53,21 @@ class Workout(models.Model):
         default=TRACK)
 
 class Activity(models.Model):
-    athlete = models.ForeignKey('api.User', on_delete=models.CASCADE, )
+    athlete = models.ForeignKey('api.User', on_delete=models.CASCADE)
+    workout = models.ForeignKey('api.Workout', on_delete=models.PROTECT)
+    time = models.DateTimeField(auto_now_add=True, editable=False)
+    comment = models.TextField(default='')
+
+class Suggestion(models.Model):
+    group = models.ForeignKey('api.Group', on_delete=models.CASCADE)
+    workout = models.ForeignKey('api.Workout', on_delete=models.CASCADE)
+    date = models.DateField()
+
+
+class Follows(models.Model):
+    """
+    User 1 follows user 2.
+    This is a one way relationship.
+    """
+    user1 = models.ForeignKey('api.User', on_delete=models.CASCADE, related_name='follower')
+    user2 = models.ForeignKey('api.User', on_delete=models.CASCADE)
