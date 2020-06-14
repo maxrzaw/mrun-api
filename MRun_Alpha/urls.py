@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from rest_framework.authtoken import views as auth_views
+from rest_framework.authtoken import views as token_views
 from api import views
 
 router = routers.DefaultRouter()
@@ -33,6 +33,6 @@ urlpatterns = [
 
 # Add token authentication endpoint
 urlpatterns += [
-    path('api-token-auth/', auth_views.obtain_auth_token)
+    path('api-token-auth/', token_views.obtain_auth_token)
 ]
 
