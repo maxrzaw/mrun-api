@@ -6,7 +6,7 @@
 - [Activities](#activities)
 - [Comments](#comments)
 ## Users
-```http
+```python
 GET api/v1/users/
 ```
 **Description** : Returns a list of users
@@ -44,7 +44,7 @@ None
 
 
 # Template:
-```http
+```python
 GET POST PATCH DELETE api/v1/
 ```
 **Description** : 
