@@ -22,7 +22,7 @@ GET api/v1/users/
 | year  | No       | Filter by graduation year         | None    | `2021`  |
 
 ```python
-GET api/v1/users/{userID}
+GET api/v1/users/{userID}/
 ```
 **Description** : Returns user object with `userID`
 
@@ -32,6 +32,38 @@ GET api/v1/users/{userID}
 
 ### Parameters
 None
+
+```python
+GET api/v1/users/{userID}/activities/
+```
+**Description** : 
+
+**Auth required** : YES
+
+**Permissions required** : 
+
+### Parameters
+|  Name    | Required |              Description              | Default | Example |
+|:---------|:--------:|:--------------------------------------|:-------:|:-------:|
+|  type    | No       | Returns activities of specified type. | None    | `type=1` |
+|  page    | No       | Page number.                          | 1       | `page=1`      |
+| per_page | No       | Results per page.                     |         | `per_page=10`      |
+
+```python
+POST api/v1/users/{userID}/activities/
+```
+**Description** : Creates a new activity
+
+**Auth required** : YES
+
+**Permissions required** : Logged in user is userID
+
+### Parameters
+|  Name | Required |            Description            | Default | Example |
+|:------|:--------:|:----------------------------------|:-------:|:-------:|
+|       |          |                                   |         | ``      |
+|       |          |                                   |         | ``      |
+|       |          |                                   |         | ``      |
 
 
 ## Groups
