@@ -10,6 +10,6 @@ GET api/v1/users/
 ### Parameters
 |  Name | Required |        Description        | Default | Example |
 |:------|:--------:|:--------------------------|:-------:|:-------:|
-| group | No       | Filter by groupID         | None    | 1       |
-| year  | No       | Filter by graduation year | None    | 2021    |
+| group | No       | Filter by groupID         | None    | `1`     |
+| year  | No       | Filter by graduation year | None    | `2021`  |
 |       |          |                           |         |         |
