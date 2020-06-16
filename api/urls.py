@@ -1,4 +1,4 @@
-"""MRun_Alpha URL Configuration
+"""API URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -13,21 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.conf.urls import url
 from django.urls import include, path
-from django.contrib.auth import views as auth_views
-from MRun_Alpha import views
+from rest_framework import routers
+from rest_framework.authtoken import views as token_views
+from api import views
 
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('api/', include('api.urls'), name='api-root'),
-    path('admin/', admin.site.urls),
-    url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^logout/$', views.logout_view, name='logout'),
-    url(r'^signup/$', views.signup, name='signup'),
+    path('', include(router.urls)),
+    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
+# Add token authentication endpoint
+urlpatterns += [
+    path('token-auth/', token_views.obtain_auth_token)
+]
 

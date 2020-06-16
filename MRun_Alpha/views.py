@@ -1,7 +1,33 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from rest_framework import viewsets
 from rest_framework import permissions
-from MRun_Alpha.api.serializers import UserSerializer, GroupSerializer
+from api.serializers import UserSerializer, GroupSerializer
+from django.contrib.auth import get_user_model, logout
+User = get_user_model()
+
+from django.contrib.auth import login, authenticate
+from MRun_Alpha.forms import SignUpForm
+from django.shortcuts import render, redirect
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('api-root')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page.
+    return render(request, 'registration/logout.html')
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -19,3 +45,4 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
