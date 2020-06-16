@@ -6,6 +6,7 @@
 - [Activities](#activities)
 - [Comments](#comments)
 ## Users
+
 ```python
 GET api/v1/users/
 ```
@@ -21,6 +22,8 @@ GET api/v1/users/
 | group | No       | Filter by groupID                 | None    | `1`     |
 | year  | No       | Filter by graduation year         | None    | `2021`  |
 
+---
+
 ```python
 GET api/v1/users/{userID}/
 ```
@@ -32,6 +35,8 @@ GET api/v1/users/{userID}/
 
 ### Parameters
 None
+
+---
 
 ```python
 GET api/v1/users/{userID}/activities/
@@ -48,6 +53,8 @@ GET api/v1/users/{userID}/activities/
 |  type    | No       | Returns activities of specified type. | None    | `type=1` |
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |         | `per_page=10`      |
+
+---
 
 ```python
 POST api/v1/users/{userID}/activities/
@@ -76,6 +83,8 @@ POST api/v1/users/{userID}/activities/
 
 
 # Template:
+---
+
 ```python
 GET POST PATCH DELETE api/v1/
 ```
