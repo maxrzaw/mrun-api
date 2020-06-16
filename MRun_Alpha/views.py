@@ -8,6 +8,7 @@ User = get_user_model()
 from django.contrib.auth import login, authenticate
 from MRun_Alpha.forms import SignUpForm
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 
 def signup(request):
@@ -25,9 +26,12 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 def logout_view(request):
+    """
+    Log out a user.
+    """
     logout(request)
     # Redirect to a success page.
-    return render(request, 'registration/logout.html')
+    return render(request, 'registration/logout.html', {'login_url': reverse('login')})
 
 class UserViewSet(viewsets.ModelViewSet):
     """

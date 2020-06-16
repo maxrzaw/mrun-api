@@ -3,16 +3,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+YEAR_IN_SCHOOL_CHOICES = [
+    ('FR', 'Freshman'),
+    ('SO', 'Sophomore'),
+    ('JR', 'Junior'),
+    ('SR', 'Senior'),
+    ('GR', 'Graduate'),
+]
 
 class User(AbstractUser):
     bio = models.TextField(max_length=500, blank=True)
-    YEAR_IN_SCHOOL_CHOICES = [
-        ('FR', 'Freshman'),
-        ('SO', 'Sophomore'),
-        ('JR', 'Junior'),
-        ('SR', 'Senior'),
-        ('GR', 'Graduate'),
-    ]
     year = models.CharField(
         max_length=2,
         choices=YEAR_IN_SCHOOL_CHOICES,
