@@ -21,7 +21,7 @@ GET api/v1/users/
 | group | No       | Filter by groupID                 | None    | `1`     |
 | year  | No       | Filter by graduation year         | None    | `2021`  |
 
-```http
+```python
 GET api/v1/users/{userID}
 ```
 **Description** : Returns user object with `userID`
