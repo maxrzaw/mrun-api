@@ -1,6 +1,6 @@
 # MRun-Alpha
 Alpha version of my MRun App
-`GET /api/`
+`GET /api/`{:.http}
 ```http
 GET /api/
 ```
