@@ -1,4 +1,10 @@
 # API Endpoints
+## Table of Contents
+- [Users](#users)
+- [Groups](#groups)
+- [Workouts](#workouts)
+- [Activities](#activities)
+- [Comments](#comments)
 ## Users
 ```http
 GET api/v1/users/
@@ -16,7 +22,10 @@ GET api/v1/users/
 | year  | No       | Filter by graduation year         | None    | `2021`  |
 
 
-
+## Groups
+## Workouts
+## Activities
+## Comments
 
 
 
