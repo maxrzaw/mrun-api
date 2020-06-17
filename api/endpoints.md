@@ -65,6 +65,7 @@ GET api/v1/users/{user_id}/workouts/
 **Auth required** : YES
 
 **Permissions required** : None
+
 [//]: # (Might change this to following later on)
 
 ### Parameters
