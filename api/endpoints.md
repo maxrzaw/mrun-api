@@ -162,7 +162,7 @@ GET api/v1/groups/{group_id}/members/
 ```python
 GET api/v1/workouts/
 ```
-**Description** :
+**Description** : Returns a list of Workout objects
 
 **Auth required** : YES
 
@@ -171,27 +171,37 @@ GET api/v1/workouts/
 ### Parameters
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
+|  page    | No       | Page number.                          | 1       | `page=1`      |
+| per_page | No       | Results per page.                     |  10     | `per_page=10` |
+|  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 
 ---
 
 ```python
 POST api/v1/workouts/
 ```
-**Description** :
+**Description** : Creates a new workout
 
 **Auth required** : YES
 
 **Permissions required** : None
 
 ### Parameters
-|  Name    | Required |              Description              | Default |    Example    |
-|:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
+None
+
+---
+
+```python
+GET api/v1/workouts/{workout_id}
+```
+**Description** : Returns a Workout object
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+None
 
 ---
 
@@ -203,6 +213,20 @@ DELETE api/v1/workouts/{workout_id}
 **Auth required** : YES
 
 **Permissions required** : logged in user is Owner or Admin
+
+### Parameters
+None
+
+---
+
+```python
+PATCH api/v1/workouts/{workout_id}
+```
+**Description** : Modifies a Workout
+
+**Auth required** : YES
+
+**Permissions required** : logged in user is Owner
 
 ### Parameters
 None
