@@ -7,6 +7,7 @@
 - [Comments](#comments)
 ## Users
 ### User Model:
+
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | int | unique user id. |
@@ -14,7 +15,11 @@
 | first_name | char | Users first name. |
 | last_name | char | Users last name. |
 | bio | text | Users Bio. |
-| year | integer | Users graduation year |
+| year | integer | Users graduation year. |
+| group_id | integer | group identifier. |
+
+---
+
 ```python
 GET api/v1/users/
 ```
@@ -86,6 +91,15 @@ GET api/v1/users/{user_id}/workouts/
 ---
 
 ## Groups
+### Group Model:
+
+| Name | Type | Description |
+|:-----|:----:|:------------|
+| id | integer | Unique group identifier. |
+| name | char | Group name. |
+| description | text | Group description. |
+
+---
 
 ```python
 GET api/v1/groups/
@@ -166,6 +180,15 @@ GET api/v1/groups/{group_id}/members/
 ---
 
 ## Workouts
+### Workout Model:
+| Name | Type | Description |
+|:-----|:----:|:------------|
+| workout_id | integer | Unique workout identifier. |
+| title | char | Title of the workout. |
+| description | text | Workout description. |
+| category_id | integer | unique category identifier. |
+| owner | integer | user_id of owner. |
+
 
 ```python
 GET api/v1/workouts/
