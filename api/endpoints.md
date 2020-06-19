@@ -238,7 +238,53 @@ None
 ```python
 POST api/v1/activities/
 ```
-**Description** : Creates a new activity
+**Description** : Creates a new activity for the logged in user
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+None
+
+---
+
+```python
+GET api/v1/activities/
+```
+**Description** : Returns a list of Activity objects
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+|  Name    | Required |              Description              | Default |    Example    |
+|:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
+|  page    | No       | Page number.                          | 1       | `page=1`      |
+| per_page | No       | Results per page.                     |  10     | `per_page=10` |
+|  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
+
+---
+
+```python
+GET api/v1/activities/{activity_id}/
+```
+**Description** : Returns an Activity object
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+None
+
+---
+
+```python
+GET api/v1/activities/{activity_id}/comments/
+```
+**Description** : Returns a list of Comment objects associated with activity_id
 
 **Auth required** : YES
 
