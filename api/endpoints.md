@@ -297,26 +297,42 @@ None
 
 ## Comments
 
-
-
-
-
-# Template:
-
 ```python
-GET POST PATCH DELETE api/v1/
+POST api/v1/comments/
 ```
-**Description** :
+**Description** : Creates a Comment object
 
-**Auth required** : YES/NO
+**Auth required** : YES
 
-**Permissions required** :
+**Permissions required** : None
 
 ### Parameters
-|  Name    | Required |              Description              | Default |    Example    |
-|:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
-|          |          |                                       |         | ``            |
+None
 
 ---
+
+```python
+PATCH api/v1/comments/{comment_id}/
+```
+**Description** : Modifies a Comment object
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+None
+
+---
+
+```python
+DELETE api/v1/comments/{comment_id}/
+```
+**Description** : Deletes a Comment object
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+None
