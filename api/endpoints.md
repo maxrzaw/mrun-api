@@ -6,7 +6,15 @@
 - [Activities](#activities)
 - [Comments](#comments)
 ## Users
-
+### User Model:
+| Name | Type | Description |
+|:-----|:----:|:------------|
+| id | int | unique user id. |
+| username | char | unique identifier for every user. |
+| first_name | char | Users first name. |
+| last_name | char | Users last name. |
+| bio | text | Users Bio. |
+| year | integer | Users graduation year |
 ```python
 GET api/v1/users/
 ```
