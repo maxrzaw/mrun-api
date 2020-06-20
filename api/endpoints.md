@@ -183,7 +183,7 @@ GET api/v1/groups/{group_id}/members/
 ### Workout Model:
 | Name | Type | Description |
 |:-----|:----:|:------------|
-| workout_id | integer | Unique workout identifier. |
+| id | integer | Unique workout identifier. |
 | title | char | Title of the workout. |
 | description | text | Workout description. |
 | category_id | integer | unique category identifier. |
@@ -265,6 +265,14 @@ None
 ---
 
 ## Activities
+### Activity Model:
+| Name | Type | Description |
+|:-----|:----:|:------------|
+| id | integer | unique key for every Activity. |
+| user_id | integer | user_id of the User who completed the workout. |
+| workout_id | integer | workout_id for the corresponding Workout. |
+| time | dateTime | time activity was completed. |
+| comment | text | comment about the activity. |
 
 ```python
 POST api/v1/activities/
@@ -313,6 +321,20 @@ None
 ---
 
 ```python
+DELETE api/v1/activities/{activity_id}/
+```
+**Description** : Deletes an Activity object
+
+**Auth required** : YES
+
+**Permissions required** : Admin or Owner
+
+### Parameters
+None
+
+---
+
+```python
 GET api/v1/activities/{activity_id}/comments/
 ```
 **Description** : Returns a list of Comment objects associated with activity_id
@@ -327,6 +349,14 @@ None
 ---
 
 ## Comments
+### Comment Model:
+| Name | Type | Description |
+|:-----|:----:|:------------|
+| id | integer | unique key for each comment.|
+| activity_id | integer | id for the activity the comment was for. |
+| user_id | integer | id for user making the comment. |
+| time | DateTime | time when the comment was created. |
+| text | text | the body of the comment. |
 
 ```python
 POST api/v1/comments/
