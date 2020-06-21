@@ -271,7 +271,7 @@ None
 | id | integer | unique key for every Activity. |
 | user_id | integer | user_id of the User who completed the workout. |
 | workout_id | integer | workout_id for the corresponding Workout. |
-| time | dateTime | time activity was completed. |
+| time | DateTime | time activity was completed. |
 | comment | text | comment about the activity. |
 
 ```python
@@ -348,24 +348,22 @@ None
 
 **Example:**
 ```json
-{
-    data: [
-        {
-            id: 01,
-            activity_id: 01,
-            user_id: 01,
-            time: "2020-06-21T19:46:45.315Z",
-            text: "This is a comment.",
-        },
-        {
-            id: 02,
-            activity_id: 01,
-            user_id: 01,
-            time: "2020-06-21T19:47:01.826Z",
-            text: "This is another comment.",
-        },
-    ]
-}
+[
+    {
+        "id": 01,
+        "activity_id": 01,
+        "user_id": 01,
+        "time": "2020-06-21T19:46:45.315Z",
+        "text": "This is a comment.",
+    },
+    {
+        "id": 02,
+        "activity_id": 01,
+        "user_id": 01,
+        "time": "2020-06-21T19:47:01.826Z",
+        "text": "This is another comment.",
+    },
+]
 ```
 
 ---
