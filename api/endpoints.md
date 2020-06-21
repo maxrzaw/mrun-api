@@ -54,7 +54,7 @@ None
 ```python
 GET api/v1/users/{user_id}/activities/
 ```
-**Description** : Returns a list of Activity objects for user with user_id
+**Description** : Returns a list of Activity summaries for the specified user.
 
 **Auth required** : YES
 
@@ -73,7 +73,7 @@ GET api/v1/users/{user_id}/activities/
 ```python
 GET api/v1/users/{user_id}/workouts/
 ```
-**Description** : Returns workouts for user_id
+**Description** : Returns a list of workouts for specified user.
 
 **Auth required** : YES
 
@@ -291,7 +291,7 @@ None
 ```python
 GET api/v1/activities/
 ```
-**Description** : Returns a list of Activity objects
+**Description** : Returns a list of Activity summaries.
 
 **Auth required** : YES
 
@@ -337,7 +337,7 @@ None
 ```python
 GET api/v1/activities/{activity_id}/comments/
 ```
-**Description** : Returns a list of Comment objects associated with activity_id
+**Description** : Returns a list of Comment objects associated with specified activity.
 
 **Auth required** : YES
 
@@ -345,6 +345,28 @@ GET api/v1/activities/{activity_id}/comments/
 
 ### Parameters
 None
+
+**Example:**
+```json
+{
+    data: [
+        {
+            id: 01,
+            activity_id: 01,
+            user_id: 01,
+            time: "2020-06-21T19:46:45.315Z",
+            text: "This is a comment.",
+        },
+        {
+            id: 02,
+            activity_id: 01,
+            user_id: 01,
+            time: "2020-06-21T19:47:01.826Z",
+            text: "This is another comment.",
+        },
+    ]
+}
+```
 
 ---
 
