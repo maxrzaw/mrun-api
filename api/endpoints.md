@@ -137,6 +137,7 @@ GET api/v1/users/{user_id}/activities/
         },
     },
 ]
+```
 
 ---
 
@@ -157,6 +158,26 @@ GET api/v1/users/{user_id}/workouts/
 |  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
+
+**Example:**
+```json
+[
+    {
+        "id": 1,
+        "title": "4x400m",
+        "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+        "category_id": 1,
+        "owner": 1,
+    },
+    {
+        "id": 2,
+        "title": "30-30s",
+        "description": "200s in 30 sec with 30 sec rest. I usually do 6-8 of them. If you arent in shape these are pretty tough so you can aim for a longer time like all under 35s for example. If you aren't hitting the time either make it higher or take a 5 min rest halfway through.",
+        "category_id": 1,
+        "owner": 1,
+    },
+]
+```
 
 ---
 
@@ -185,6 +206,22 @@ GET api/v1/groups/
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
+
+**Example:**
+```json
+[
+    {
+        "id": 1,
+        "name": "Short Sprints",
+        "description": "100m and 200m specialists.",
+    },
+    {
+        "id": 2,
+        "name": "Long Sprints",
+        "description": "200m and 400m specialists.",
+    },
+]
+```
 
 ---
 
