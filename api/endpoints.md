@@ -337,6 +337,26 @@ GET api/v1/workouts/
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 |  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 
+**Example Response:**
+```json
+[
+    {
+        "id": 1,
+        "title": "4x400m",
+        "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+        "category_id": 1,
+        "owner": 1,
+    },
+    {
+        "id": 2,
+        "title": "30-30s",
+        "description": "200s in 30 sec with 30 sec rest. I usually do 6-8 of them. If you arent in shape these are pretty tough so you can aim for a longer time like all under 35s for example. If you aren't hitting the time either make it higher or take a 5 min rest halfway through.",
+        "category_id": 1,
+        "owner": 1,
+    },
+]
+```
+
 ---
 
 ```python
@@ -354,7 +374,7 @@ None
 ---
 
 ```python
-GET api/v1/workouts/{workout_id}
+GET api/v1/workouts/{workout_id}/
 ```
 **Description** : Returns a Workout object
 
@@ -365,10 +385,21 @@ GET api/v1/workouts/{workout_id}
 ### Parameters
 None
 
+**Example Response:**
+```json
+{
+    "id": 1,
+    "title": "4x400m",
+    "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+    "category_id": 1,
+    "owner": 1,
+}
+```
+
 ---
 
 ```python
-DELETE api/v1/workouts/{workout_id}
+DELETE api/v1/workouts/{workout_id}/
 ```
 **Description** : Deletes a workout
 
@@ -382,7 +413,7 @@ None
 ---
 
 ```python
-PATCH api/v1/workouts/{workout_id}
+PATCH api/v1/workouts/{workout_id}/
 ```
 **Description** : Modifies a Workout
 
@@ -392,6 +423,17 @@ PATCH api/v1/workouts/{workout_id}
 
 ### Parameters
 None
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "title": "4x400m",
+    "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+    "category_id": 1,
+    "owner": 1,
+}
+```
 
 ---
 
@@ -435,6 +477,40 @@ GET api/v1/activities/
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 |  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 
+**Example Response:**
+```json
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "workout_id": 2,
+        "time": "2020-06-21T19:46:45.315Z",
+        "comment": "This is a comment.",
+        "workout": {
+            "id": 2,
+            "title": "4x400m",
+            "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+            "category_id": 1,
+            "owner": 1,
+        },
+    },
+    {
+        "id": 2,
+        "user_id": 1,
+        "workout_id": 2,
+        "time": "2020-06-22T19:46:45.315Z",
+        "comment": "This is another comment.",
+        "workout": {
+            "id": 2,
+            "title": "4x400m",
+            "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+            "category_id": 1,
+            "owner": 1,
+        },
+    },
+]
+```
+
 ---
 
 ```python
@@ -448,6 +524,17 @@ GET api/v1/activities/{activity_id}/
 
 ### Parameters
 None
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "user_id": 1,
+    "workout_id": 2,
+    "time": "2020-06-21T19:46:45.315Z",
+    "comment": "This is a comment.",
+}
+```
 
 ---
 
@@ -534,6 +621,17 @@ PATCH api/v1/comments/{comment_id}/
 
 ### Parameters
 None
+
+**Example Response:**
+```json
+{
+    "id": 01,
+    "activity_id": 01,
+    "user_id": 01,
+    "time": "2020-06-21T19:46:45.315Z",
+    "text": "This is a comment.",
+}
+```
 
 ---
 
