@@ -240,7 +240,7 @@ None
 ---
 
 ```python
-PATCH api/v1/groups/
+PATCH api/v1/groups/{group_id}/
 ```
 **Description** : Modify a group
 
@@ -254,7 +254,7 @@ None
 ---
 
 ```python
-DELETE api/v1/groups/
+DELETE api/v1/groups/{group_id}/
 ```
 **Description** : Removes a group
 
@@ -283,6 +283,30 @@ GET api/v1/groups/{group_id}/members/
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
+
+**Example Response:**
+```json
+[
+    {
+        "id": 1,
+        "username": "johndoe",
+        "first_name": "John",
+        "last_name": "Doe",
+        "bio": "This is my bio.",
+        "year": 2021,
+        "group_id": 1,
+    },
+    {
+        "id": 3,
+        "username": "johndoe2",
+        "first_name": "John",
+        "last_name": "Doe",
+        "bio": "This is my bio.\r\nGo Blue!",
+        "year": 2022,
+        "group_id": 1,
+    },
+]
+```
 
 ---
 
