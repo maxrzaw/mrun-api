@@ -23,7 +23,7 @@
 ```python
 GET api/v1/users/
 ```
-**Description** : Returns a list of users
+**Description** : Returns a list of User objects
 
 **Auth required** : YES
 
@@ -34,6 +34,30 @@ GET api/v1/users/
 |:------|:--------:|:----------------------------------|:-------:|:-------:|
 | group | No       | Filter by group_id                | None    | `group=1`     |
 | year  | No       | Filter by graduation year         | None    | `year=2021`  |
+
+**Example:**
+```json
+[
+    {
+        "id": 1,
+        "username": "johndoe",
+        "first_name": "John",
+        "last_name": "Doe",
+        "bio": "This is my bio.",
+        "year": 2021,
+        "group_id": 1,
+    },
+    {
+        "id": 2,
+        "username": "janedoe",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "bio": "This is my bio.\r\nGo Blue!",
+        "year": 2022,
+        "group_id": 2,
+    },
+]
+```
 
 ---
 
@@ -48,6 +72,19 @@ GET api/v1/users/{user_id}/
 
 ### Parameters
 None
+
+**Example:**
+```json
+{
+    "id": 1,
+    "username": "johndoe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "bio": "This is my bio.",
+    "year": 2021,
+    "group_id": 1,
+}
+```
 
 ---
 
