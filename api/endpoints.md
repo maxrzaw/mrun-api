@@ -35,7 +35,7 @@ GET api/v1/users/
 | group | No       | Filter by group_id                | None    | `group=1`     |
 | year  | No       | Filter by graduation year         | None    | `year=2021`  |
 
-**Example:**
+**Example Response:**
 ```json
 [
     {
@@ -73,7 +73,7 @@ GET api/v1/users/{user_id}/
 ### Parameters
 None
 
-**Example:**
+**Example Response:**
 ```json
 {
     "id": 1,
@@ -105,7 +105,7 @@ GET api/v1/users/{user_id}/activities/
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 | sort     | No       | Sort by date ascending or descending. | desc    | `sort=asc`    |
 
-**Example:**
+**Example Response:**
 ```json
 [
     {
@@ -159,7 +159,7 @@ GET api/v1/users/{user_id}/workouts/
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 
-**Example:**
+**Example Response:**
 ```json
 [
     {
@@ -207,7 +207,7 @@ GET api/v1/groups/
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 
-**Example:**
+**Example Response:**
 ```json
 [
     {
@@ -453,7 +453,7 @@ GET api/v1/activities/{activity_id}/comments/
 ### Parameters
 None
 
-**Example:**
+**Example Response:**
 ```json
 [
     {
