@@ -371,7 +371,7 @@ None
 
 ---
 
-```python
+```bash
 GET api/v1/activities/{activity_id}/comments/
 ```
 **Description** : Returns a list of Comment objects associated with specified activity.
