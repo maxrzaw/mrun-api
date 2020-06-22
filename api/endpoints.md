@@ -105,6 +105,39 @@ GET api/v1/users/{user_id}/activities/
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 | sort     | No       | Sort by date ascending or descending. | desc    | `sort=asc`    |
 
+**Example:**
+```json
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "workout_id": 2,
+        "time": "2020-06-21T19:46:45.315Z",
+        "comment": "This is a comment.",
+        "workout": {
+            "id": 2,
+            "title": "4x400m",
+            "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+            "category_id": 1,
+            "owner": 1,
+        },
+    },
+    {
+        "id": 2,
+        "user_id": 1,
+        "workout_id": 2,
+        "time": "2020-06-22T19:46:45.315Z",
+        "comment": "This is another comment.",
+        "workout": {
+            "id": 2,
+            "title": "4x400m",
+            "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+            "category_id": 1,
+            "owner": 1,
+        },
+    },
+]
+
 ---
 
 ```python
