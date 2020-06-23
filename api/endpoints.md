@@ -597,6 +597,44 @@ None
 | text | text | the body of the comment. |
 
 ```python
+GET api/v1/comments/
+```
+**Description** : Returns a list of comment objects.
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+### Parameters
+|  Name    | Required |              Description              | Default |    Example    |
+|:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
+|  page    | No       | Page number.                          | 1       | `page=1`      |
+| per_page | No       | Results per page.                     |  10     | `per_page=10` |
+|  user    | No       | Returns comments of only one user.    | None    | `user=1`      |
+
+**Example Response:**
+```json
+[
+    {
+        "id": 01,
+        "activity_id": 01,
+        "user_id": 01,
+        "time": "2020-06-21T19:46:45.315Z",
+        "text": "This is a comment.",
+    },
+    {
+        "id": 02,
+        "activity_id": 01,
+        "user_id": 01,
+        "time": "2020-06-21T19:47:01.826Z",
+        "text": "This is another comment.",
+    },
+]
+```
+
+---
+
+```python
 POST api/v1/comments/
 ```
 **Description** : Creates a Comment object
@@ -642,7 +680,7 @@ DELETE api/v1/comments/{comment_id}/
 
 **Auth required** : YES
 
-**Permissions required** : None
+**Permissions required** : Owner or Admin
 
 ### Parameters
 None
