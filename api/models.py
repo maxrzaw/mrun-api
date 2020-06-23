@@ -71,3 +71,12 @@ class Follows(models.Model):
     """
     user1 = models.ForeignKey('api.User', on_delete=models.CASCADE, related_name='follower')
     user2 = models.ForeignKey('api.User', on_delete=models.CASCADE)
+
+class Comment(models.Model):
+    """
+    User comments on an activity.
+    """
+    user = models.ForeignKey('api.User', on_delete=models.CASCADE, related_name='commenter')
+    activity = models.ForeignKey('api.Activity', on_delete=models.CASCADE, related_name='linked_activity')
+    time = models.DateTimeField(auto_now_add=True, editable=False)
+    text = models.TextField(default='')

@@ -29,6 +29,7 @@ router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('comments/', views.CommentList.as_view(), name='comment-list'),
 ]
 
 # Add token authentication endpoint
