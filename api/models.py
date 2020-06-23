@@ -32,7 +32,7 @@ class Workout(models.Model):
     workout_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
-    creator = models.ForeignKey('api.User', on_delete=models.DO_NOTHING, null=True)
+    owner = models.ForeignKey('api.User', on_delete=models.DO_NOTHING, null=True)
 
     HILL = 'H'
     CORE = 'C'

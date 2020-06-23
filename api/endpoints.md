@@ -317,7 +317,7 @@ GET api/v1/groups/{group_id}/members/
 | id | integer | Unique workout identifier. |
 | title | char | Title of the workout. |
 | description | text | Workout description. |
-| category_id | integer | unique category identifier. |
+| category | char | unique category identifier. |
 | owner | integer | user_id of owner. |
 
 
@@ -344,14 +344,14 @@ GET api/v1/workouts/
         "id": 1,
         "title": "4x400m",
         "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-        "category_id": 1,
+        "category": "T",
         "owner": 1,
     },
     {
         "id": 2,
         "title": "30-30s",
         "description": "200s in 30 sec with 30 sec rest. I usually do 6-8 of them. If you arent in shape these are pretty tough so you can aim for a longer time like all under 35s for example. If you aren't hitting the time either make it higher or take a 5 min rest halfway through.",
-        "category_id": 1,
+        "category": "T",
         "owner": 1,
     },
 ]
@@ -391,7 +391,7 @@ None
     "id": 1,
     "title": "4x400m",
     "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-    "category_id": 1,
+    "category": "T",
     "owner": 1,
 }
 ```
@@ -430,7 +430,7 @@ None
     "id": 1,
     "title": "4x400m",
     "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-    "category_id": 1,
+    "category": "T",
     "owner": 1,
 }
 ```
@@ -490,7 +490,7 @@ GET api/v1/activities/
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category_id": 1,
+            "category": "T",
             "owner": 1,
         },
     },
@@ -504,7 +504,7 @@ GET api/v1/activities/
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category_id": 1,
+            "category": "T",
             "owner": 1,
         },
     },
