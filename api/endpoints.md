@@ -16,7 +16,7 @@
 | last_name | char | Users last name. |
 | bio | text | Users Bio. |
 | year | integer | Users graduation year. |
-| group_id | integer | group identifier. |
+| group | integer | group identifier. |
 
 ---
 
@@ -32,7 +32,7 @@ GET api/v1/users/
 ### Parameters
 |  Name | Required |            Description            | Default | Example |
 |:------|:--------:|:----------------------------------|:-------:|:-------:|
-| group | No       | Filter by group_id                | None    | `group=1`     |
+| group | No       | Filter by group id                | None    | `group=1`     |
 | year  | No       | Filter by graduation year         | None    | `year=2021`  |
 
 **Example Response:**
@@ -45,7 +45,7 @@ GET api/v1/users/
         "last_name": "Doe",
         "bio": "This is my bio.",
         "year": 2021,
-        "group_id": 1,
+        "group": 1,
     },
     {
         "id": 2,
@@ -54,7 +54,7 @@ GET api/v1/users/
         "last_name": "Doe",
         "bio": "This is my bio.\r\nGo Blue!",
         "year": 2022,
-        "group_id": 2,
+        "group": 2,
     },
 ]
 ```
@@ -82,7 +82,7 @@ None
     "last_name": "Doe",
     "bio": "This is my bio.",
     "year": 2021,
-    "group_id": 1,
+    "group": 1,
 }
 ```
 
@@ -110,29 +110,29 @@ GET api/v1/users/{user_id}/activities/
 [
     {
         "id": 1,
-        "user_id": 1,
-        "workout_id": 2,
+        "user": 1,
+        "workout": 2,
         "time": "2020-06-21T19:46:45.315Z",
         "comment": "This is a comment.",
-        "workout": {
+        "workout_data": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category_id": 1,
+            "category": 1,
             "owner": 1,
         },
     },
     {
         "id": 2,
-        "user_id": 1,
-        "workout_id": 2,
+        "user": 1,
+        "workout": 2,
         "time": "2020-06-22T19:46:45.315Z",
         "comment": "This is another comment.",
-        "workout": {
+        "workout_data": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category_id": 1,
+            "category": 1,
             "owner": 1,
         },
     },
@@ -166,14 +166,14 @@ GET api/v1/users/{user_id}/workouts/
         "id": 1,
         "title": "4x400m",
         "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-        "category_id": 1,
+        "category": 1,
         "owner": 1,
     },
     {
         "id": 2,
         "title": "30-30s",
         "description": "200s in 30 sec with 30 sec rest. I usually do 6-8 of them. If you arent in shape these are pretty tough so you can aim for a longer time like all under 35s for example. If you aren't hitting the time either make it higher or take a 5 min rest halfway through.",
-        "category_id": 1,
+        "category": 1,
         "owner": 1,
     },
 ]
@@ -294,7 +294,7 @@ GET api/v1/groups/{group_id}/members/
         "last_name": "Doe",
         "bio": "This is my bio.",
         "year": 2021,
-        "group_id": 1,
+        "group": 1,
     },
     {
         "id": 3,
@@ -303,7 +303,7 @@ GET api/v1/groups/{group_id}/members/
         "last_name": "Doe",
         "bio": "This is my bio.\r\nGo Blue!",
         "year": 2022,
-        "group_id": 1,
+        "group": 1,
     },
 ]
 ```
@@ -442,8 +442,8 @@ None
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | integer | unique key for every Activity. |
-| user_id | integer | user_id of the User who completed the workout. |
-| workout_id | integer | workout_id for the corresponding Workout. |
+| user | integer | user_id of the User who completed the workout. |
+| workout | integer | workout_id for the corresponding Workout. |
 | time | DateTime | time activity was completed. |
 | comment | text | comment about the activity. |
 
@@ -482,11 +482,11 @@ GET api/v1/activities/
 [
     {
         "id": 1,
-        "user_id": 1,
-        "workout_id": 2,
+        "user": 1,
+        "workout": 2,
         "time": "2020-06-21T19:46:45.315Z",
         "comment": "This is a comment.",
-        "workout": {
+        "workout_data": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
@@ -496,11 +496,11 @@ GET api/v1/activities/
     },
     {
         "id": 2,
-        "user_id": 1,
-        "workout_id": 2,
+        "user": 1,
+        "workout": 2,
         "time": "2020-06-22T19:46:45.315Z",
         "comment": "This is another comment.",
-        "workout": {
+        "workout_data": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
@@ -529,8 +529,8 @@ None
 ```json
 {
     "id": 1,
-    "user_id": 1,
-    "workout_id": 2,
+    "user": 1,
+    "workout": 2,
     "time": "2020-06-21T19:46:45.315Z",
     "comment": "This is a comment.",
 }
@@ -569,15 +569,15 @@ None
 [
     {
         "id": 01,
-        "activity_id": 01,
-        "user_id": 01,
+        "activity": 01,
+        "user": 01,
         "time": "2020-06-21T19:46:45.315Z",
         "text": "This is a comment.",
     },
     {
         "id": 02,
-        "activity_id": 01,
-        "user_id": 01,
+        "activity": 01,
+        "user": 01,
         "time": "2020-06-21T19:47:01.826Z",
         "text": "This is another comment.",
     },
@@ -591,8 +591,8 @@ None
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | integer | unique key for each comment.|
-| activity_id | integer | id for the activity the comment was for. |
-| user_id | integer | id for user making the comment. |
+| activity | integer | activity_id for the activity the comment was for. |
+| user | integer | user_id for user making the comment. |
 | time | DateTime | time when the comment was created. |
 | text | text | the body of the comment. |
 
@@ -617,15 +617,15 @@ GET api/v1/comments/
 [
     {
         "id": 01,
-        "activity_id": 01,
-        "user_id": 01,
+        "activity": 01,
+        "user": 01,
         "time": "2020-06-21T19:46:45.315Z",
         "text": "This is a comment.",
     },
     {
         "id": 02,
-        "activity_id": 01,
-        "user_id": 01,
+        "activity": 01,
+        "user": 01,
         "time": "2020-06-21T19:47:01.826Z",
         "text": "This is another comment.",
     },
@@ -664,8 +664,8 @@ None
 ```json
 {
     "id": 01,
-    "activity_id": 01,
-    "user_id": 01,
+    "activity": 01,
+    "user": 01,
     "time": "2020-06-21T19:46:45.315Z",
     "text": "This is a comment.",
 }
