@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('comments/', views.CommentList.as_view(), name='comment-list'),
+    path('comments/<int:comment_id>/', views.CommentDetail.as_view(), name='comment-detail'),
 ]
 
 # Add token authentication endpoint

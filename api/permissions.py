@@ -13,3 +13,16 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         
         # Write permissions are only allowed to the owner.
         return obj.owner == request.user
+
+
+class CustomCommentPermission(permissions.BasePermission):
+    """
+    Custom permission to only allow owner or admin to delete a comment.
+    """
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            print(request.method)
+            print(request.auth)
+            return request.auth != None
+        
+        return obj.user == request.user or request.user.is_staff
