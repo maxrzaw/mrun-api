@@ -646,6 +646,14 @@ POST api/v1/comments/
 ### Parameters
 None
 
+**Example:**
+```bash
+curl --header "Content-type: application/json" \
+  --request POST \
+  --data '{"activity": {activity_id}, "text":"{text goes here}"}' \
+  http://localhost:8000/api/comments/
+```
+
 ---
 
 ```python

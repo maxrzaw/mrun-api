@@ -61,7 +61,6 @@ class CommentDetail(APIView):
         dict_obj = model_to_dict(comment)
         return JsonResponse(dict_obj, status=status.HTTP_200_OK)
 
-
     def patch(self, request, comment_id, format=None):
         # get the comment object
         comment = Comment.objects.get(id=comment_id)
