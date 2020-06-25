@@ -72,6 +72,14 @@ class CommentDetail(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, comment_id, format=None):
+        # get the comment object
+        comment = Comment.objects.get(id=comment_id)
+        # check the comment permissions
+        self.check_object_permissions(request, comment)
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class GroupViewSet(viewsets.ModelViewSet):

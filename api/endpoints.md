@@ -668,6 +668,14 @@ PATCH api/v1/comments/{comment_id}/
 ### Parameters
 None
 
+**Example:**
+```bash
+curl --header "Content-type: application/json" \
+  --request PATCH \
+  --data '{"text":"[[text goes here]]"}' \
+  http://localhost:8000/api/comments/{comment_id}/
+```
+
 **Example Response:**
 ```json
 {

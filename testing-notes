@@ -35,3 +35,5 @@ curl --header "Accept: application/json; indent=4;" \
 
 
 curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86"   --request PATCH   --data '{"text":"I want to replace this text again."}'   http://localhost:8000/api/comments/3/
+
+curl -v --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request DELETE   http://localhost:8000/api/comments/4/
