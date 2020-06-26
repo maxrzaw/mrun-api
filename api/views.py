@@ -23,6 +23,51 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
 
+class UserList(APIView):
+    """
+    API endpoint that allows users to be viewed.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        # Get all the Users
+        users = User.objects.all().order_by('id')
+        paginator = Paginator(users, per_page, allow_empty_first_page=True)
+
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage as identifier:
+            Response(Http404)
+        # Serialize requested page and return
+        serializer = UserSerializer(requested_page, many=True)
+        renderer = JSONRenderer()
+        data = {}
+
+        user_list = renderer.render(serializer.data).decode('utf-8')
+        data["users"] = json.loads(user_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
+
+class UserDetail(APIView):
+    """
+    API endpoint that allows view of one user.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, user_id, format=None):
+        # get the User object
+        user = User.objects.get(id=user_id)
+        fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'year']
+        # Turn it into a dictionary for JsonResponse
+        dict_obj = model_to_dict(user, fields=fields)
+        return JsonResponse(dict_obj, status=status.HTTP_200_OK)
+
+    
 
 
 class CommentList(APIView):
@@ -40,11 +85,11 @@ class CommentList(APIView):
 
         # Create a paginator
         paginator = Paginator(all_comments, per_page, allow_empty_first_page=True)
-        
+
         try:
             # Get requested page
             requested_page = paginator.page(page)
-        except EmptyPage as identifier:
+        except InvalidPage as identifier:
             Response(Http404)
         # Serialize requested page and return
         serializer = CommentSerializer(requested_page, many=True)
@@ -54,9 +99,9 @@ class CommentList(APIView):
         comment_list = renderer.render(serializer.data).decode('utf-8')
         data["comments"] = json.loads(comment_list)
 
-        if requested_page.has_next():
-            data["next"] = requested_page.next_page_number()
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
         return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
 
     def post(self, request, format=None):
         # Modify the data a little
