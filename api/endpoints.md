@@ -599,7 +599,7 @@ None
 ```python
 GET api/v1/comments/
 ```
-**Description** : Returns a list of comment objects.
+**Description** : Returns a list of comment objects. If there is a next page, then "next" will contain it, otherwise "next" will not exist.
 
 **Auth required** : YES
 
@@ -614,22 +614,26 @@ GET api/v1/comments/
 
 **Example Response:**
 ```json
-[
-    {
-        "id": 01,
-        "activity": 01,
-        "user": 01,
-        "time": "2020-06-21T19:46:45.315Z",
-        "text": "This is a comment.",
-    },
-    {
-        "id": 02,
-        "activity": 01,
-        "user": 01,
-        "time": "2020-06-21T19:47:01.826Z",
-        "text": "This is another comment.",
-    },
-]
+{
+    "comments": [
+        {
+            "id": 01,
+            "activity": 01,
+            "user": 01,
+            "time": "2020-06-21T19:46:45.315Z",
+            "text": "This is a comment.",
+        },
+        {
+            "id": 02,
+            "activity": 01,
+            "user": 01,
+            "time": "2020-06-21T19:47:01.826Z",
+            "text": "This is another comment.",
+        },
+    ],
+    "next": 2,
+}
+
 ```
 
 ---

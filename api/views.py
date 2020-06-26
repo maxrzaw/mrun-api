@@ -3,14 +3,16 @@ from rest_framework import permissions
 from api.permissions import CustomCommentPermission
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view # Probably don't want this
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from api.serializers import UserSerializer, GroupSerializer, CommentSerializer # These seem kinda dumb
 from api.models import Comment
 from django.contrib.auth.models import Group
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
+import json
 User = get_user_model()
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -22,6 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
 
+
 class CommentList(APIView):
     """
     List all comments or create a new one.
@@ -29,9 +32,31 @@ class CommentList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        all_comments = Comment.objects.all()
-        serializer = CommentSerializer(all_comments, many=True)
-        return Response(serializer.data)
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        # Get all the comments
+        all_comments = Comment.objects.all().order_by('id')
+
+        # Create a paginator
+        paginator = Paginator(all_comments, per_page, allow_empty_first_page=True)
+        
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except EmptyPage as identifier:
+            Response(Http404)
+        # Serialize requested page and return
+        serializer = CommentSerializer(requested_page, many=True)
+        renderer = JSONRenderer()
+        data = {}
+        
+        comment_list = renderer.render(serializer.data).decode('utf-8')
+        data["comments"] = json.loads(comment_list)
+
+        if requested_page.has_next():
+            data["next"] = requested_page.next_page_number()
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
     def post(self, request, format=None):
         # Modify the data a little
