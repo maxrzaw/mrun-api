@@ -100,7 +100,7 @@ GET api/v1/users/{user_id}/activities/
 ### Parameters
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
-|  type    | No       | Returns activities of specified type. | None    | `type=1`      |
+|  type    | No       | Returns activities of specified type. | None    | `type=T`      |
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 | sort     | No       | Sort by date ascending or descending. | desc    | `sort=asc`    |
@@ -111,28 +111,28 @@ GET api/v1/users/{user_id}/activities/
     {
         "id": 1,
         "user": 1,
-        "workout": 2,
+        "workout_id": 2,
         "time": "2020-06-21T19:46:45.315Z",
         "comment": "This is a comment.",
-        "workout_data": {
+        "workout": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category": 1,
+            "category": "T",
             "owner": 1,
         },
     },
     {
         "id": 2,
         "user": 1,
-        "workout": 2,
+        "workout_id": 2,
         "time": "2020-06-22T19:46:45.315Z",
         "comment": "This is another comment.",
-        "workout_data": {
+        "workout": {
             "id": 2,
             "title": "4x400m",
             "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
-            "category": 1,
+            "category": "T",
             "owner": 1,
         },
     },

@@ -24,6 +24,7 @@ from api import views
 urlpatterns = [
     path('users/', views.UserList.as_view(), name='user-list'),
     path('users/<int:user_id>/', views.UserDetail.as_view(), name='user-detail'),
+    path('users/<int:user_id>/activities/', views.UserActivities.as_view(), name='user-activities'),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('comments/', views.CommentList.as_view(), name='comment-list'),
     path('comments/<int:comment_id>/', views.CommentDetail.as_view(), name='comment-detail'),

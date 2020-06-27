@@ -29,7 +29,7 @@ class Memberships(models.Model):
     group = models.ForeignKey('api.Group', on_delete=models.CASCADE)
 
 class Workout(models.Model):
-    workout_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
     owner = models.ForeignKey('api.User', on_delete=models.DO_NOTHING, null=True)
@@ -53,7 +53,7 @@ class Workout(models.Model):
         default=TRACK)
 
 class Activity(models.Model):
-    athlete = models.ForeignKey('api.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('api.User', on_delete=models.CASCADE)
     workout = models.ForeignKey('api.Workout', on_delete=models.PROTECT)
     time = models.DateTimeField(auto_now_add=True, editable=False)
     comment = models.TextField(default='')

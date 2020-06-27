@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from api.serializers import UserSerializer, GroupSerializer, CommentSerializer # These seem kinda dumb
-from api.models import Comment
+from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer
+from api.models import Comment, Workout, Activity
 from django.contrib.auth.models import Group
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import Http404, JsonResponse
@@ -68,6 +68,45 @@ class UserDetail(APIView):
         return JsonResponse(dict_obj, status=status.HTTP_200_OK)
 
     
+class UserActivities(APIView):
+    """
+    API endpoint for viewing a users activities.
+    """
+    def get(self, request, user_id, format=None):
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        sort = params.get("sort", "desc")
+        sort = '-time' if sort == "desc" else 'time'
+        # Get the Activities
+        activities = Activity.objects.filter(user=user_id).order_by(sort)
+        # Create the paginator
+        paginator = Paginator(activities, per_page, allow_empty_first_page=True)
+
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage as identifier:
+            Response(Http404)
+        # Serialize requested page and return
+        serializer = ActivitySummarySerializer(requested_page, many=True)
+        print(type(serializer.data))
+
+        renderer = JSONRenderer()
+        activity_list = renderer.render(serializer.data).decode('utf-8')
+        data = {}
+        data["user"] = user_id
+        data["activities"] = json.loads(activity_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
+
+class UserWorkouts(APIView):
+    """
+    API endpoint for viewing a users workouts.
+    """
+    pass
 
 
 class CommentList(APIView):
