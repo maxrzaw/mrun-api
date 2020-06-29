@@ -32,6 +32,8 @@ urlpatterns = [
     path('users/<int:user_id>/workouts/', views.UserWorkouts.as_view(), name='user-workouts'),
     path('comments/', views.CommentList.as_view(), name='comment-list'),
     path('comments/<int:comment_id>/', views.CommentDetail.as_view(), name='comment-detail'),
+    path('workouts/', views.WorkoutList.as_view(), name='workout-list'),
+    path('workouts/<int:workout_id>/', views.WorkoutDetail.as_view(), name='workout-detail'),
 ]
 
 # Add token authentication endpoint

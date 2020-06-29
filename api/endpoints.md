@@ -202,10 +202,7 @@ GET api/v1/groups/
 **Permissions required** : None
 
 ### Parameters
-|  Name    | Required |              Description              | Default |    Example    |
-|:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
-|  page    | No       | Page number.                          | 1       | `page=1`      |
-| per_page | No       | Results per page.                     |  10     | `per_page=10` |
+None
 
 **Example Response:**
 ```json

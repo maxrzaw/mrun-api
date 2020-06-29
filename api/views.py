@@ -123,7 +123,6 @@ class UserWorkouts(APIView):
             raise Http404("Invalid Page")
         # Serialize requested page and return
         serializer = WorkoutSerializer(requested_page, many=True)
-        print(type(serializer.data))
 
         renderer = JSONRenderer()
         workout_list = renderer.render(serializer.data).decode('utf-8')
@@ -270,3 +269,44 @@ class GroupMembers(APIView):
             members.append(m.user)
         serializer = UserSerializer(members, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class WorkoutList(APIView):
+    """
+    API endpoint for list of workouts.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, format=None):
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        category = params.get("type", None)
+
+        # Retrieve the workouts
+        workouts = Workout.objects.filter(owner=user_id).order_by('id') if category is None else Workout.objects.filter(owner=user_id, category=category).order_by('id')
+
+        # Create the paginator
+        paginator = Paginator(workouts, per_page, allow_empty_first_page=True)
+
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage:
+            raise Http404("Invalid Page")
+        # Serialize requested page and return
+        serializer = WorkoutSerializer(requested_page, many=True)
+
+        renderer = JSONRenderer()
+        workout_list = renderer.render(serializer.data).decode('utf-8')
+        data = {}
+        data["workouts"] = json.loads(workout_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+
+    def post(self, request, format=None):
+        pass
+
+
+
+
+class WorkoutDetail(APIView):
+    pass
