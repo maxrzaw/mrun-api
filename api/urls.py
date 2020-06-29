@@ -22,10 +22,13 @@ from api import views
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('groups/', views.GroupList.as_view(), name='group-list'),
+    path('groups/<int:group_id>/', views.GroupDetail.as_view(), name='group-detail'),
     path('users/', views.UserList.as_view(), name='user-list'),
     path('users/<int:user_id>/', views.UserDetail.as_view(), name='user-detail'),
     path('users/<int:user_id>/activities/', views.UserActivities.as_view(), name='user-activities'),
-    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('users/<int:user_id>/workouts/', views.UserWorkouts.as_view(), name='user-workouts'),
     path('comments/', views.CommentList.as_view(), name='comment-list'),
     path('comments/<int:comment_id>/', views.CommentDetail.as_view(), name='comment-detail'),
 ]

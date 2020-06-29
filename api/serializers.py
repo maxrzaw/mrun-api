@@ -1,7 +1,6 @@
-from django.contrib.auth.models import Group
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from api.models import Comment, Workout, Activity
+from api.models import Comment, Workout, Activity, Group
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,11 +12,11 @@ class UserSummarySerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['id', 'username', 'first_name', 'last_name']
 
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['url', 'name']
+        fields = ['id', 'name', 'description']
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,13 +1,12 @@
 from rest_framework import viewsets # Don't want this later
 from rest_framework import permissions
-from api.permissions import CustomCommentPermission
+from api.permissions import CustomCommentPermission, IsAdminOrReadOnly
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer
-from api.models import Comment, Workout, Activity
-from django.contrib.auth.models import Group
+from api.models import Comment, Workout, Activity, Group
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
@@ -40,8 +39,8 @@ class UserList(APIView):
         try:
             # Get requested page
             requested_page = paginator.page(page)
-        except InvalidPage as identifier:
-            Response(Http404)
+        except InvalidPage:
+            raise Http404("Invalid Page")
         # Serialize requested page and return
         serializer = UserSerializer(requested_page, many=True)
         renderer = JSONRenderer()
@@ -72,6 +71,7 @@ class UserActivities(APIView):
     """
     API endpoint for viewing a users activities.
     """
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, user_id, format=None):
         params = request.query_params
         page = int(params.get("page", 1)) # default page number is 1
@@ -86,11 +86,10 @@ class UserActivities(APIView):
         try:
             # Get requested page
             requested_page = paginator.page(page)
-        except InvalidPage as identifier:
-            Response(Http404)
+        except InvalidPage:
+            raise Http404("Invalid page.")
         # Serialize requested page and return
         serializer = ActivitySummarySerializer(requested_page, many=True)
-        print(type(serializer.data))
 
         renderer = JSONRenderer()
         activity_list = renderer.render(serializer.data).decode('utf-8')
@@ -106,7 +105,34 @@ class UserWorkouts(APIView):
     """
     API endpoint for viewing a users workouts.
     """
-    pass
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, user_id, format=None):
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        workout_type = params.get("type", None)
+
+        # Get the Workouts
+        workouts = Workout.objects.filter(owner=user_id).order_by('id') if workout_type is None else Workout.objects.filter(owner=user_id, category=workout_type).order_by('id')
+        # Create the paginator
+        paginator = Paginator(workouts, per_page, allow_empty_first_page=True)
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage:
+            raise Http404("Invalid Page")
+        # Serialize requested page and return
+        serializer = WorkoutSerializer(requested_page, many=True)
+        print(type(serializer.data))
+
+        renderer = JSONRenderer()
+        workout_list = renderer.render(serializer.data).decode('utf-8')
+        data = {}
+        data["user"] = user_id
+        data["workouts"] = json.loads(workout_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
 
 class CommentList(APIView):
@@ -128,8 +154,8 @@ class CommentList(APIView):
         try:
             # Get requested page
             requested_page = paginator.page(page)
-        except InvalidPage as identifier:
-            Response(Http404)
+        except InvalidPage:
+            raise Http404("Invalid Page")
         # Serialize requested page and return
         serializer = CommentSerializer(requested_page, many=True)
         renderer = JSONRenderer()
@@ -191,10 +217,43 @@ class CommentDetail(APIView):
 
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupList(APIView):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint for viewing a list of all the groups.
     """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    def get(self, request, format=None):
+        groups = Group.objects.all()
+        serializer = GroupSerializer(groups, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        # Modify the data a little
+        data = request.data
+        
+        serializer = GroupSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GroupDetail(APIView):
+    """
+    API endpoint for viewing a single group.
+    """
     permission_classes = [permissions.IsAdminUser]
+
+    def patch(self, request, group_id, format=None):
+        group = Group.objects.get(id=group_id)
+        serializer = GroupSerializer(group, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, group_id, format=None):
+        # get the group object
+        group = Group.objects.get(id=group_id)
+        group.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -42,3 +42,28 @@ curl --header "Accept: application/json; indent=4;" \
   --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86" \
   --request GET \
   "http://localhost:8000/api/users/2/activities/"
+
+
+curl --header "Content-type: application/json" \
+  --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f" \
+  --request POST \
+  --data '{"name": "scrubs", "description":"I am making a new group for scrubs."}' \
+  "http://localhost:8000/api/groups/" | prettyjson
+
+
+
+curl --header "Content-type: application/json" \
+  --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f" \
+  --request PATCH \
+  --data '{"description":"I am making a new group for scrubs2.0."}' \
+  "http://localhost:8000/api/groups/4/" | prettyjson
+
+
+
+
+
+
+
+
+
+

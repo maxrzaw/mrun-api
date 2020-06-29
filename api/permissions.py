@@ -21,8 +21,18 @@ class CustomCommentPermission(permissions.BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
-            print(request.method)
-            print(request.auth)
             return request.auth != None
         
         return obj.user == request.user or request.user.is_staff
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow admins edit access.
+    """
+    
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return request.auth != None
+        
+        return request.user.is_staff
