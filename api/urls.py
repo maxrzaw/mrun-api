@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('groups/', views.GroupList.as_view(), name='group-list'),
     path('groups/<int:group_id>/', views.GroupDetail.as_view(), name='group-detail'),
+    path('groups/<int:group_id>/members/', views.GroupMembers.as_view(), name='group-members'),
     path('users/', views.UserList.as_view(), name='user-list'),
     path('users/<int:user_id>/', views.UserDetail.as_view(), name='user-detail'),
     path('users/<int:user_id>/activities/', views.UserActivities.as_view(), name='user-activities'),

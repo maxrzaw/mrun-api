@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer
-from api.models import Comment, Workout, Activity, Group
+from api.models import Comment, Workout, Activity, Group, Memberships
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
@@ -257,3 +257,16 @@ class GroupDetail(APIView):
         group = Group.objects.get(id=group_id)
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class GroupMembers(APIView):
+    """
+    API endpoint to view the member list of a group.
+    """
+    permission_classes = [permissions.IsAdminUser]
+    def get(self, request, group_id, format=None):
+
+        members = list()
+        for m in Memberships.objects.filter(group_id=group_id).select_related('user'):
+            members.append(m.user)
+        serializer = UserSerializer(members, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
