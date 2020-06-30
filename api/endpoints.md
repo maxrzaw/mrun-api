@@ -454,7 +454,9 @@ POST api/v1/activities/
 **Permissions required** : None
 
 ### Parameters
-None
+|    Name     | Required |                    Description                  | Default |    Example    |
+|:------------|:--------:|:------------------------------------------------|:-------:|:-------------:|
+| new_workout |   No     | Indicates if a new workout needs to be created. | 0       | `new_workout=1`      |
 
 ---
 
