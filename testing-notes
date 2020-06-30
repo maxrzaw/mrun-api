@@ -59,10 +59,22 @@ curl --header "Content-type: application/json" \
   "http://localhost:8000/api/groups/4/" | prettyjson
 
 
+curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/groups/1/members/"
 
 
+curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/workouts/"
+
+curl --header "Content-type: application/json" \
+  --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f" \
+  --request POST \
+  --data '{"title": "Lots of 100s", "description": "Run 100m and rest for 20 sec then run 100m again. Do this for 20-30 reps.", "category": "T"}' \
+  "http://localhost:8000/api/workouts/"
 
 
+curl --header "Content-type: application/json" --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86" --request POST --data '{"title": "Lots of 100s", "description": "Run 100m and rest for 20 sec then run 100m again. Do this for 20-30 reps.", "category": "T"}' http://localhost:8000/api/workouts/
+
+
+curl --header "Content-type: application/json" --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86" --request POST --data '{"title": "test", "description": "test", "category": "T"}' http://localhost:8000/api/workouts/
 
 
 

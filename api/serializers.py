@@ -34,6 +34,13 @@ class ActivitySummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ['id', 'user', 'workout_id', 'time', 'comment', 'workout']
+    
+    def create(self, validated_data):
+        workout_data = validated_data.pop('workout')
+        workout = Workout.objects.create(**workout_data)
+        activity = Activity.objects.create(workout=workout, **validated_data)
+        return activity
+
 
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:

@@ -30,9 +30,19 @@ class IsAdminOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow admins edit access.
     """
-    
+
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return request.auth != None
         
         return request.user.is_staff
+
+class IsOwnerAdminOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow owner or admin to modify a workout.
+    """
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return request.auth != None
+        
+        return obj.owner == request.user or request.user.is_staff

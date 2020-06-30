@@ -1,6 +1,6 @@
 from rest_framework import viewsets # Don't want this later
 from rest_framework import permissions
-from api.permissions import CustomCommentPermission, IsAdminOrReadOnly
+from api.permissions import CustomCommentPermission, IsAdminOrReadOnly, IsOwnerAdminOrReadOnly
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
@@ -8,19 +8,12 @@ from rest_framework.response import Response
 from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer
 from api.models import Comment, Workout, Activity, Group, Memberships
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
 import json
 User = get_user_model()
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]
 
 class UserList(APIView):
     """
@@ -60,7 +53,11 @@ class UserDetail(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, user_id, format=None):
         # get the User object
-        user = User.objects.get(id=user_id)
+        try:
+            user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
         fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'year']
         # Turn it into a dictionary for JsonResponse
         dict_obj = model_to_dict(user, fields=fields)
@@ -78,6 +75,14 @@ class UserActivities(APIView):
         per_page = int(params.get("per_page", 10)) # default per page is 10
         sort = params.get("sort", "desc")
         sort = '-time' if sort == "desc" else 'time'
+
+        # Check if the user exists
+        try:
+            # get the user object
+            user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
         # Get the Activities
         activities = Activity.objects.filter(user=user_id).order_by(sort)
         # Create the paginator
@@ -111,6 +116,13 @@ class UserWorkouts(APIView):
         page = int(params.get("page", 1)) # default page number is 1
         per_page = int(params.get("per_page", 10)) # default per page is 10
         workout_type = params.get("type", None)
+
+        # Check if the user exists
+        try:
+            # get the user object
+            user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
 
         # Get the Workouts
         workouts = Workout.objects.filter(owner=user_id).order_by('id') if workout_type is None else Workout.objects.filter(owner=user_id, category=workout_type).order_by('id')
@@ -187,8 +199,12 @@ class CommentDetail(APIView):
     permission_classes = [CustomCommentPermission]
 
     def get(self, request, comment_id, format=None):
-        # get the comment object
-        comment = Comment.objects.get(id=comment_id)
+        try:
+            # get the comment object
+            comment = Comment.objects.get(id=comment_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+        
         # check the comment permissions
         self.check_object_permissions(request, comment)
         # Turn it into a dictionary for JsonResponse
@@ -196,8 +212,11 @@ class CommentDetail(APIView):
         return JsonResponse(dict_obj, status=status.HTTP_200_OK)
 
     def patch(self, request, comment_id, format=None):
-        # get the comment object
-        comment = Comment.objects.get(id=comment_id)
+        try:
+            # get the comment object
+            comment = Comment.objects.get(id=comment_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
         # check the comment permissions
         self.check_object_permissions(request, comment)
         serializer = CommentSerializer(comment, data=request.data, partial=True)
@@ -207,8 +226,11 @@ class CommentDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, comment_id, format=None):
-        # get the comment object
-        comment = Comment.objects.get(id=comment_id)
+        try:
+            # get the comment object
+            comment = Comment.objects.get(id=comment_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
         # check the comment permissions
         self.check_object_permissions(request, comment)
         comment.delete()
@@ -227,7 +249,7 @@ class GroupList(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        # Modify the data a little
+        # Get the data from the request
         data = request.data
         
         serializer = GroupSerializer(data=data)
@@ -244,7 +266,11 @@ class GroupDetail(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def patch(self, request, group_id, format=None):
-        group = Group.objects.get(id=group_id)
+        try:
+            # Get the group
+            group = Group.objects.get(id=group_id)
+        except ObjectDoesNotExist:
+            raise Http404("Group does not exist.")
         serializer = GroupSerializer(group, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -252,8 +278,11 @@ class GroupDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, group_id, format=None):
-        # get the group object
-        group = Group.objects.get(id=group_id)
+        try:
+            # Get the group
+            group = Group.objects.get(id=group_id)
+        except ObjectDoesNotExist:
+            raise Http404("Group does not exist.")
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -263,6 +292,12 @@ class GroupMembers(APIView):
     """
     permission_classes = [permissions.IsAdminUser]
     def get(self, request, group_id, format=None):
+
+        try:
+            # Get the group
+            group = Group.objects.get(id=group_id)
+        except ObjectDoesNotExist:
+            raise Http404("Group does not exist.")
 
         members = list()
         for m in Memberships.objects.filter(group_id=group_id).select_related('user'):
@@ -283,7 +318,7 @@ class WorkoutList(APIView):
         category = params.get("type", None)
 
         # Retrieve the workouts
-        workouts = Workout.objects.filter(owner=user_id).order_by('id') if category is None else Workout.objects.filter(owner=user_id, category=category).order_by('id')
+        workouts = Workout.objects.all().order_by('id') if category is None else Workout.objects.filter(category=category).order_by('id')
 
         # Create the paginator
         paginator = Paginator(workouts, per_page, allow_empty_first_page=True)
@@ -302,11 +337,74 @@ class WorkoutList(APIView):
         data["workouts"] = json.loads(workout_list)
         data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
 
-    def post(self, request, format=None):
-        pass
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
+
+    def post(self, request, format=None):
+        # Modify the data a little
+        data = request.data
+        data["owner"] = request.user.id
+        
+        serializer = WorkoutSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
 class WorkoutDetail(APIView):
-    pass
+    """
+    API endpoint for viewing a single workout.
+    """
+
+    permission_classes = [IsOwnerAdminOrReadOnly]
+
+    def get(self, request, workout_id, format=None):
+        try:
+            # Get the workout
+            workout = Workout.objects.get(id=workout_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # Check permissions 
+        self.check_object_permissions(request, workout)
+
+        serializer = WorkoutSerializer(workout)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, workout_id, format=None):
+        data = request.data
+
+        try:
+            # Get the workout
+            workout = Workout.objects.get(id=workout_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # Check permissions 
+        self.check_object_permissions(request, workout)
+
+        serializer = WorkoutSerializer(workout, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, workout_id, format=None):
+        try:
+            # Get the workout
+            workout = Workout.objects.get(id=workout_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # Check permissions 
+        self.check_object_permissions(request, workout)
+
+        workout.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+    
