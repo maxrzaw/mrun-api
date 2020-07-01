@@ -474,7 +474,6 @@ GET api/v1/activities/
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
-|  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 
 **Example Response:**
 ```json

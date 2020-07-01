@@ -76,6 +76,13 @@ curl --header "Content-type: application/json" --header "Authorization: Token 59
 
 curl --header "Content-type: application/json" --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86" --request POST --data '{"title": "test", "description": "test", "category": "T"}' http://localhost:8000/api/workouts/
 
+curl --header "Content-type: application/json" --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86" --request PATCH --data '{"title": "testing", "description": "testing", "category": "T"}' http://localhost:8000/api/workouts/9/
+
+
+
+curl --header "Content-type: application/json" --header "Authorization: Token 392ab8f3c2051d77c1227155e5820885d0a5cc7b" --request DELETE http://localhost:8000/api/workouts/6/
+
+
 
 
 

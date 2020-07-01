@@ -405,6 +405,75 @@ class WorkoutDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class ActivityList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+        category = params.get("type", None)
+
+        if type is None:
+            activities = Activity.objects.all()
+            
+        else:
+            all_activities = Activity.objects.select_related('workout')
+            activities = list()
+            for a in all_activities:
+                if a.workout.category == category:
+                    activities.append(a)
+        paginator = Paginator(activities, per_page, allow_empty_first_page=True)
+
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage:
+            raise Http404("Invalid Page")
+        # Serialize requested page and return
+        serializer = ActivitySummarySerializer(data=requested_page, many=True)
+
+        renderer = JSONRenderer()
+        activity_list = renderer.render(serializer.data).decode('utf-8')
+
+        data = {}
+        data["activities"] = json.loads(activity_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
+    def post(self, request, format=None):
+        params = request.query_params
+        new_workout = params.get("new_workout", 0)
+
+        data = request.data
+        data["user"] = request.user.id
+
+        if new_workout:
+            # Use the ActivitySummarySerializer
+
+            # Check if 'workout" key is missing
+            if "workout" not in data:
+                raise Http404('Missing "workout" key')
+
+            # Add "owner" field to data["workout"]
+            data["workout"]["owner"] = data["user"]
+
+            serializer = ActivitySummarySerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                raise Http404(serializer.errors)
+        else:
+            # Use the ActivitySerializer
+            serializer = ActivitySerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(data=serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
 
 
     
