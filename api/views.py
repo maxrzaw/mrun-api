@@ -474,6 +474,58 @@ class ActivityList(APIView):
                 return Response(data=serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
+class ActivityDetail(APIView):
+    """
+    API endpoint for viewing and editing activities.
+    """
+    permission_classes = [IsOwnerAdminOrReadOnly]
+
+    def get(self, request, activity_id, format=None):
+        try:
+            # Get the activity
+            activity = Activity.objects.get(id=activity_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+        
+        # Check permission
+        self.check_object_permissions(request, activity)
+        serializer = ActivitySummarySerializer(activity)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, activity_id, format=None):
+        data = request.data
+        try:
+            # Get the activity
+            activity = Activity.objects.get(id=activity_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # Check permission
+        self.check_object_permissions(request, activity)
+        serializer = ActivitySummarySerializer(activity, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+    def delete(self, request, activity_id, format=None):
+        try:
+            # Get the activity
+            activity = Activity.objects.get(id=activity_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # Check permission
+        self.check_object_permissions(request, activity)
+        activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
 
 
     
