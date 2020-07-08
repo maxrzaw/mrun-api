@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer, SuggestionSerializer
+from api.serializers import *
 from api.models import Comment, Workout, Activity, Group, Memberships, Suggestion
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
@@ -557,27 +557,43 @@ class SuggestionView(APIView):
         else:
             raise Http404(serializer.errors)
 
-    def patch(self, request, format=None):
-        data = request.data
-        serializer = SuggestionSerializer(data=data)
-        # TODO: Where do I want to get the id from?
+class SuggestionDetail(APIView):
+    """
+    API endpoint for suggested workouts.
+    """
+    permission_classes = [IsAdminOrReadOnly]
 
+    def get(self, request, sid, format=None):
+        
         try:
-            # Get the suggestion
-            suggestion = Suggestion.objects.get(id=id)
+            # Get the workout
+            suggestion = Suggestion.objects.select_related('workout').get(id=sid)
         except ObjectDoesNotExist as err:
             raise Http404(err)
 
+
+        serializer = SuggestionSummarySerializer(suggestion)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        data = request.data
+        serializer = SuggestionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
             raise Http404(serializer.errors)
 
-    def delete(self, request, format=None):
-        pass
+    def delete(self, request, sid, format=None):
+        try:
+            # Get the workout
+            suggestion = Suggestion.objects.select_related('workout').get(id=sid)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
 
-
+        suggestion.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
 
 
 
