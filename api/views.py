@@ -575,15 +575,6 @@ class SuggestionDetail(APIView):
         serializer = SuggestionSummarySerializer(suggestion)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, format=None):
-        data = request.data
-        serializer = SuggestionSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            raise Http404(serializer.errors)
-
     def delete(self, request, sid, format=None):
         try:
             # Get the workout
