@@ -82,7 +82,8 @@ curl --header "Content-type: application/json" --header "Authorization: Token 59
 
 curl --header "Content-type: application/json" --header "Authorization: Token 392ab8f3c2051d77c1227155e5820885d0a5cc7b" --request DELETE http://localhost:8000/api/workouts/6/
 
+curl --header "Content-type: application/json"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request POST   --data '{"comment": "This is a test activity comment.", "workout": {"title": "400s", "description": "run lots of 400s.", "category": "T"}}'   "http://localhost:8000/api/activities/?new_workout=1"
 
 
 
-
+curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/v1/suggestions/?group=3&date=2020-07-07"

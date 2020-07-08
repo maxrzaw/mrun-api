@@ -5,14 +5,15 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer
-from api.models import Comment, Workout, Activity, Group, Memberships
+from api.serializers import UserSerializer, GroupSerializer, CommentSerializer, ActivitySerializer, WorkoutSerializer, ActivitySummarySerializer, SuggestionSerializer
+from api.models import Comment, Workout, Activity, Group, Memberships, Suggestion
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
 import json
+import datetime
 User = get_user_model()
 
 class UserList(APIView):
@@ -521,6 +522,61 @@ class ActivityDetail(APIView):
         self.check_object_permissions(request, activity)
         activity.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SuggestionView(APIView):
+    """
+    API endpoint for suggested workouts.
+    """
+    permission_classes = [IsAdminOrReadOnly]
+
+    def get(self, request, format=None):
+        params = request.query_params
+        # default group of 1
+        group = params.get("group", 1)
+        # default date of today
+        date = params.get("date", datetime.date.today())
+        
+        try:
+            # Get the workout
+            suggestion = Suggestion.objects.select_related('workout').get(group_id=group, date=date)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        # convert to a workout
+        workout = suggestion.workout
+        serializer = WorkoutSerializer(workout)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        data = request.data
+        serializer = SuggestionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise Http404(serializer.errors)
+
+    def patch(self, request, format=None):
+        data = request.data
+        serializer = SuggestionSerializer(data=data)
+        # TODO: Where do I want to get the id from?
+
+        try:
+            # Get the suggestion
+            suggestion = Suggestion.objects.get(id=id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise Http404(serializer.errors)
+
+    def delete(self, request, format=None):
+        pass
+
 
 
 

@@ -23,7 +23,7 @@ from MRun_Alpha import views
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('api/', include('api.urls'), name='api-root'),
+    path('api/v1/', include('api.urls'), name='api-root'),
     path('admin/', admin.site.urls),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', views.logout_view, name='logout'),

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from api.models import Comment, Workout, Activity, Group
+from api.models import Comment, Workout, Activity, Group, Suggestion
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +46,8 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ['id', 'user', 'workout_id', 'time', 'comment']
+
+class SuggestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Suggestion
+        fields = ['id', 'group', 'workout_id', 'time']
