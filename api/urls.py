@@ -41,6 +41,7 @@ urlpatterns = [
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
     path('suggestions/<int:sid>/', views.SuggestionDetail.as_view(), name='suggestions-detail'),
     path('membership/', views.Membership.as_view(), name='membership'),
+    path('credential-check/', views.CredentialCheck.as_view(), name='credential-check'),
 ]
 
 

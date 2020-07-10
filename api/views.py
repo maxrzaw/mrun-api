@@ -697,6 +697,16 @@ class Membership(APIView):
         except ObjectDoesNotExist as error:
             return Response(data={"detail": "User not in group."}, status=status.HTTP_400_BAD_REQUEST)
 
+class CredentialCheck(APIView):
+    """
+    API endpoint for checking if authenticated.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def head(self, request, format=None):
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 
