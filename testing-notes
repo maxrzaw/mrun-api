@@ -14,7 +14,7 @@ Token: 392ab8f3c2051d77c1227155e5820885d0a5cc7b
 
 
 GET TOKEN:
-curl --header "Content-type: application/json"   --request POST   --data '{"username": "mzawisa4", "password": "garmin1sGr8"}'   http://localhost:8000/api/v1/token-auth/
+curl --header "Content-type: application/json"   --request POST   --data '{"username": "maxrzaw", "password": "password123"}'   http://localhost:8000/api/v1/token-auth/
 
 
 
@@ -94,4 +94,4 @@ curl --header "Content-type: application/json"   --header "Authorization: Token 
 
 
 
-
+curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86"   --request GET   "http://localhost:8000/api/v1/activities/?filter=group"
