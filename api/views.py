@@ -660,7 +660,7 @@ class Membership(APIView):
 
     def post(self, request, format=None):
         try:
-            group_id = request.POST.get("group", None)
+            group_id = request.query_params.get("group", None)
         except AttributeError:
             return Response(data="Missing group parameterA.", status=status.HTTP_400_BAD_REQUEST)
 
