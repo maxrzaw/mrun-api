@@ -5,6 +5,7 @@
 - [Workouts](#workouts)
 - [Activities](#activities)
 - [Comments](#comments)
+- [Suggestions](#suggestions)
 ## Users
 ### User Model:
 
@@ -70,8 +71,7 @@ GET api/v1/users/{user_id}/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -201,8 +201,7 @@ GET api/v1/groups/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -231,8 +230,7 @@ POST api/v1/groups/
 
 **Permissions required** : Admin
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -245,8 +243,7 @@ PATCH api/v1/groups/{group_id}/
 
 **Permissions required** : Admin
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -259,8 +256,7 @@ DELETE api/v1/groups/{group_id}/
 
 **Permissions required** : Admin
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -365,8 +361,7 @@ POST api/v1/workouts/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -379,8 +374,7 @@ GET api/v1/workouts/{workout_id}/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -404,8 +398,7 @@ DELETE api/v1/workouts/{workout_id}/
 
 **Permissions required** : logged in user is Owner or Admin
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -418,8 +411,7 @@ PATCH api/v1/workouts/{workout_id}/
 
 **Permissions required** : logged in user is Owner
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -520,8 +512,7 @@ GET api/v1/activities/{activity_id}/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -545,8 +536,7 @@ DELETE api/v1/activities/{activity_id}/
 
 **Permissions required** : Admin or Owner
 
-### Parameters
-None
+**Parameters:** None
 
 ---
 
@@ -559,8 +549,7 @@ GET api/v1/activities/{activity_id}/comments/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example Response:**
 ```json
@@ -645,8 +634,7 @@ POST api/v1/comments/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example:**
 ```bash
@@ -667,8 +655,7 @@ PATCH api/v1/comments/{comment_id}/
 
 **Permissions required** : None
 
-### Parameters
-None
+**Parameters:** None
 
 **Example:**
 ```bash
@@ -700,5 +687,112 @@ DELETE api/v1/comments/{comment_id}/
 
 **Permissions required** : Owner or Admin
 
+**Parameters:** None
+
+
+## Suggestions
+### Suggestion Model:
+
+| Name |  Type   | Description |
+|:-----|:-------:|:------------|
+|  id  | integer | unique identifier for each suggestion |
+| group_id | integer | group identifier |
+| workout_id | integer | workout identifier |
+| date | Date | day the suggestion is for |
+
+```python
+GET api/v1/suggestions/
+```
+**Description** : Returns the suggested workout for the given date and group.
+
+**Auth required** : YES
+
+**Permissions required** : None
+
 ### Parameters
-None
+|  Name  | Required |              Description              | Default |    Example    |
+|:-------|:--------:|:--------------------------------------|:-------:|:-------------:|
+| group  | No       | group_id of the group                 | 1       | `group=1`      |
+|  date  | No       | Date of the suggestion                |  today  | `date=2020-07-14` |
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "title": "4x400m",
+    "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+    "category": "T",
+    "owner": 1,
+}
+```
+
+---
+
+```python
+POST api/v1/suggestions/
+```
+**Description** : Returns the suggested workout for the given date and group.
+
+**Auth required** : YES
+
+**Permissions required** : Admin
+
+**Parameters:** None
+
+**Example Request:**
+```json
+{
+    "group": 1,
+    "workout": 2,
+    "date": "2020-07-14",
+}
+```
+
+**Success Response:** 201 ACCEPTED
+
+---
+
+```python
+GET api/v1/suggestions/{suggestion_id}/
+```
+**Description:** Returns the suggestion object with a summary of the workout.
+
+**Auth required:** YES
+
+**Permissions required:** None
+
+**Parameters:** None
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "group": 2,
+    "date": "2020-07-14",
+    "workout": {
+        "id": 1,
+        "title": "4x400m",
+        "description": "4 min rest between reps. I don't reccomend wearing spikes for these.",
+        "category": "T",
+        "owner": 1,
+    }
+
+}
+```
+
+---
+
+```python
+DELETE api/v1/suggestions/{suggestion_id}/
+```
+**Description:** Deletes the suggestion object with suggestion_id.
+
+**Auth required:** YES
+
+**Permissions required:** Admin
+
+**Parameters:** None
+
+**Success Response:** 204 NO CONTENT
+
+---

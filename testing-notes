@@ -14,7 +14,7 @@ Token: 392ab8f3c2051d77c1227155e5820885d0a5cc7b
 
 
 GET TOKEN:
-curl --header "Content-type: application/json"   --request POST   --data '{"username": "admin", "password": "password123"}'   http://localhost:8000/api/token-auth/
+curl --header "Content-type: application/json"   --request POST   --data '{"username": "admin", "password": "password123"}'   http://localhost:8000/api/v1/token-auth/
 
 
 
@@ -87,3 +87,10 @@ curl --header "Content-type: application/json"   --header "Authorization: Token 
 
 
 curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/v1/suggestions/?group=3&date=2020-07-07"
+
+curl --header "Content-type: application/json"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request POST   --data '{"email": "maxwell4@testing.com", "username": "mzawisa4", "password1": "garmin1sGr8", "password2": "garmin1sGr8"}'   "http://localhost:8000/api/v1/register/"
+
+
+
+
+

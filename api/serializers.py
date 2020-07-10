@@ -7,6 +7,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'year']
 
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'bio', 'year']
+
 class UserSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -50,11 +56,10 @@ class ActivitySerializer(serializers.ModelSerializer):
 class SuggestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Suggestion
-        fields = ['id', 'group', 'workout_id', 'time']
+        fields = ['id', 'group', 'workout_id', 'date']
 
 class SuggestionSummarySerializer(serializers.ModelSerializer):
     workout = WorkoutSerializer()
     class Meta:
         model = Suggestion
         fields = ['id', 'workout_id', 'date', 'workout']
-        

@@ -14,6 +14,8 @@ from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
 import json
 import datetime
+import django.contrib.auth.password_validation as password_validation
+from rest_framework.authtoken.models import Token
 User = get_user_model()
 
 class UserList(APIView):
@@ -584,6 +586,72 @@ class SuggestionDetail(APIView):
 
         suggestion.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class Register(APIView):
+    """
+    API endpoint for creating a new user.
+    """
+
+    def post(self, request, format=None):
+        """
+        Need:
+        Matching passwords
+        First and last name
+        unique email
+
+        """
+        data = request.data
+
+        validated_data = {}
+        # Required fields
+        if not "email" in data:
+            return Response(data='{ "detail": "email not provided." }', status=status.HTTP_403_FORBIDDEN)
+        if not "username" in data:
+            return Response(data='{ "detail": "username not provided." }', status=status.HTTP_403_FORBIDDEN)
+        if not "password1" in data:
+            return Response(data='{ "detail": "password1 not provided." }', status=status.HTTP_403_FORBIDDEN)
+        if not "password2" in data:
+            return Response(data='{ "detail": "password2 not provided." }', status=status.HTTP_403_FORBIDDEN)
+        
+        validated_data["email"] = data["email"]
+        validated_data["username"] = data["username"]
+        validated_data["password1"] = data["password1"]
+        validated_data["password2"] = data["password2"]
+        # required but has a default
+        validated_data["year"] = data.get("year", 'FR')
+
+        # Optional fields
+        validated_data["first_name"] = data.get("first_name", '')
+        validated_data["last_name"] = data.get("last_name", '')
+        validated_data["bio"] = data.get("bio", '')
+        
+
+        # Check if email is used
+        if User.objects.filter(email=data["email"]).exists():
+            return Response(data='{ "detail": "email already in use." }', status=status.HTTP_403_FORBIDDEN)
+
+        # Check if username is used
+        if User.objects.filter(username=data["username"]).exists():
+            return Response(data='{ "detail": "username already in use." }', status=status.HTTP_403_FORBIDDEN)
+        
+        # Check to make sure passwords match
+        if data["password1"] != data["password2"]:
+            print(data)
+            return Response(data='{ "detail": "passwords must match." }', status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            password_validation.validate_password(data["password1"])
+            serializer = CreateUserSerializer(data=validated_data)
+            if serializer.is_valid():
+                new_user = serializer.save()
+                new_user.set_password(data["password1"])
+                new_user.save()
+                token = Token.objects.get_or_create(user=new_user)
+                return Response({'token': token[0].key}, status=status.HTTP_201_CREATED)
+        except password_validation.ValidationError as err:
+            return Response(data=err, status=status.HTTP_403_FORBIDDEN)
+
         
 
 
