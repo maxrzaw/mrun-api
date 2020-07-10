@@ -467,6 +467,7 @@ GET api/v1/activities/
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
+| filter   | No       | Criteria to filter on ("group" or the workout type) | None | `filter=group` |
 
 **Example Response:**
 ```json
