@@ -415,16 +415,32 @@ class ActivityList(APIView):
         params = request.query_params
         page = int(params.get("page", 1)) # default page number is 1
         per_page = int(params.get("per_page", 10)) # default per page is 10
-        category = params.get("type", None)
+        filter = params.get("filter", None)
 
-        if type is None:
-            activities = Activity.objects.all()
+
+        if filter == "group":
+            print("Hello, World!")
+            try: 
+                membership = Memberships.objects.get(user_id=request.user.id)
+                group = membership.group_id
+                results = Memberships.objects.filter(group_id=group)
+                
+                users = []
+                for m in results:
+                    users.append(m.user_id)
+                
+                activities = Activity.objects.filter(user__in=users).order_by('time')
+            except ObjectDoesNotExist as error:
+                return Response(data={"detail": "User not in group."}, status=status.HTTP_400_BAD_REQUEST)
+
+        elif filter is None:
+            activities = Activity.objects.all().order_by('time')
             
         else:
             all_activities = Activity.objects.select_related('workout')
             activities = list()
             for a in all_activities:
-                if a.workout.category == category:
+                if a.workout.category == filter:
                     activities.append(a)
         paginator = Paginator(activities, per_page, allow_empty_first_page=True)
 
@@ -435,6 +451,7 @@ class ActivityList(APIView):
             raise Http404("Invalid Page")
         # Serialize requested page and return
         serializer = ActivitySummarySerializer(data=requested_page, many=True)
+        serializer.is_valid()
 
         renderer = JSONRenderer()
         activity_list = renderer.render(serializer.data).decode('utf-8')
