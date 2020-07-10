@@ -27,6 +27,10 @@ class Group(models.Model):
 class Memberships(models.Model):
     user = models.ForeignKey('api.User', on_delete=models.CASCADE)
     group = models.ForeignKey('api.Group', on_delete=models.CASCADE)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user'], name='unique-user')
+        ]
 
 class Workout(models.Model):
     id = models.AutoField(primary_key=True)
@@ -62,6 +66,10 @@ class Suggestion(models.Model):
     group = models.ForeignKey('api.Group', on_delete=models.CASCADE)
     workout = models.ForeignKey('api.Workout', on_delete=models.CASCADE)
     date = models.DateField()
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['group', 'date'], name='unique-group-date')
+        ]
 
 
 class Follows(models.Model):

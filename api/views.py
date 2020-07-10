@@ -652,6 +652,37 @@ class Register(APIView):
         except password_validation.ValidationError as err:
             return Response(data=err, status=status.HTTP_403_FORBIDDEN)
 
+class Membership(APIView):
+    """
+    API endpoint for joining (or switching) groups.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        try:
+            group_id = request.POST.get("group", None)
+        except AttributeError:
+            return Response(data="Missing group parameterA.", status=status.HTTP_400_BAD_REQUEST)
+
+        if group_id is None:
+            return Response(data="Missing group parameterB.", status=status.HTTP_400_BAD_REQUEST)
+
+        user_id = request.user.id
+        data = { "group": group_id, "user": user_id }
+        # Check if the user already has a group
+        if Memberships.objects.filter(user_id=user_id).exists():
+            entry = Memberships.objects.get(user_id=user_id)
+            entry.group_id = group_id
+            entry.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            serializer = MembershipSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
         
 
 
