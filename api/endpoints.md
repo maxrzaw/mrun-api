@@ -6,6 +6,7 @@
 - [Activities](#activities)
 - [Comments](#comments)
 - [Suggestions](#suggestions)
+- [Memberships](#memberships)
 ## Users
 ### User Model:
 
@@ -796,3 +797,62 @@ DELETE api/v1/suggestions/{suggestion_id}/
 **Success Response:** 204 NO CONTENT
 
 ---
+
+## Memberships
+### Membership Model:
+
+| Name |  Type   | Description |
+|:-----|:-------:|:------------|
+| id | integer | unique identifier for each relationship |
+| group_id | integer | group identifier |
+| user_id | integer | user identifier |
+
+user_id must be unique across all membership entries.
+
+```python
+POST api/v1/membership/
+```
+**Description:** Allows users to update their membership status. Will overwrite existing entry if exists.
+
+**Auth required:** YES
+
+**Permissions required:** None
+
+### Parameters:
+|  Name | Required |              Description              |  Example    |
+|:------|:--------:|:--------------------------------------|:-----------:|
+| group |  yes     | The group_id for the group you would like to join. | `group=3` |
+
+**Example Responses:**
+| code | meaning |
+|:----:|:--------|
+| 201  | Success |
+| 400 | missing or incorrect group_id |
+
+---
+
+```python
+GET api/v1/membership/
+```
+**Description:** Returns the group_id for the logged in user.
+
+**Auth required:** YES
+
+**Permissions required:** None
+
+**Parameters:** None
+
+**Example Responses:**
+| code | meaning |
+|:----:|:--------|
+| 200  | Success |
+| 400 | user is not in a group |
+| 403 | not authenticated |
+
+**Success Response:**
+```json
+{
+    "user": 1,
+    "group": 1,
+}
+```

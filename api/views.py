@@ -662,12 +662,17 @@ class Membership(APIView):
         try:
             group_id = request.query_params.get("group", None)
         except AttributeError:
-            return Response(data="Missing group parameterA.", status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"detail": "Missing group parameter."}, status=status.HTTP_400_BAD_REQUEST)
 
         if group_id is None:
-            return Response(data="Missing group parameterB.", status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"detail": "Missing group parameter."}, status=status.HTTP_400_BAD_REQUEST)
 
         user_id = request.user.id
+        # Check to make sure group is valid
+        if not Group.objects.filter(id=group_id).exists():
+            return Response(data={"detail": "Invalid group id."}, status=status.HTTP_400_BAD_REQUEST)
+
+
         data = { "group": group_id, "user": user_id }
         # Check if the user already has a group
         if Memberships.objects.filter(user_id=user_id).exists():
@@ -679,8 +684,21 @@ class Membership(APIView):
             serializer = MembershipSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
+                return Response(status=status.HTTP_201_CREATED)
             else:
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, format=None):
+        # get the entry of the logged in user
+        try: 
+            membership = Memberships.objects.get(user_id=request.user.id)
+            serializer = MembershipSerializer(membership)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist as error:
+            return Response(data={"detail": "User not in group."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
         
