@@ -718,10 +718,14 @@ class CredentialCheck(APIView):
     """
     API endpoint for checking if authenticated.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
     def head(self, request, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def post(self, request, format=None):
+        print(request.data)
+        return Response(data=request.data, status=status.HTTP_200_OK)
 
 
 
