@@ -32,7 +32,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
-        fields = ['id', 'title', 'description', 'category', 'owner']
+        fields = ['id', 'title', 'description', 'category', 'owner', 'deleted']
 
 
 class ActivitySummarySerializer(serializers.ModelSerializer):

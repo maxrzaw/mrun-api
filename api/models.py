@@ -37,6 +37,7 @@ class Workout(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     owner = models.ForeignKey('api.User', on_delete=models.DO_NOTHING, null=True)
+    deleted = models.BooleanField(default=False)
 
     HILL = 'H'
     CORE = 'C'
