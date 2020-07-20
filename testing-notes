@@ -62,7 +62,7 @@ curl --header "Content-type: application/json" \
 curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/groups/1/members/"
 
 
-curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/workouts/"
+curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/v1/workouts/"
 
 curl --header "Content-type: application/json" \
   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f" \
@@ -94,6 +94,8 @@ curl --header "Content-type: application/json"   --header "Authorization: Token 
 
 
 
-curl --header "Accept: application/json; indent=4;"   --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86"   --request GET   "http://localhost:8000/api/v1/activities/?filter=group"
+curl --header "Accept: application/json"   --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86"   --request GET   "http://localhost:8000/api/v1/activities/?filter=group"
 
 curl --header "Authorization: Token 592e41d655eb953bc6f3f39fa0372b2d0143bc86"   --head   "http://localhost:8000/api/v1/credential-check/"
+
+curl --header "Accept: application/json"   --header "Authorization: Token f561cb8ff0d6d8bb04a686e0a420815a40c21b7f"   --request GET   "http://localhost:8000/api/v1/workouts/"

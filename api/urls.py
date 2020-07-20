@@ -38,10 +38,13 @@ urlpatterns = [
     path('workouts/', views.WorkoutList.as_view(), name='workout-list'),
     path('workouts/<int:workout_id>/', views.WorkoutDetail.as_view(), name='workout-detail'),
     path('activities/', views.ActivityList.as_view(), name='activity-list'),
+    path('activities/<int:activity_id>/', views.ActivityDetail.as_view(), name='activity-detail'),
+    path('activities/<int:activity_id>/comments/', views.ActivityComments.as_view(), name='activity-comments'),
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
     path('suggestions/<int:sid>/', views.SuggestionDetail.as_view(), name='suggestions-detail'),
     path('membership/', views.Membership.as_view(), name='membership'),
     path('credential-check/', views.CredentialCheck.as_view(), name='credential-check'),
+    path('me/', views.Me.as_view(), name='me'),
 ]
 
 

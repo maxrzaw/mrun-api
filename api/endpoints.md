@@ -182,6 +182,62 @@ GET api/v1/users/{user_id}/workouts/
 
 ---
 
+```python
+GET api/v1/users/me/
+```
+**Description** : Returns logged in user.
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+
+### Parameters
+None
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "username": "johndoe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "bio": "This is my bio.",
+    "year": 2021,
+    "group": 1,
+}
+```
+
+---
+
+```python
+PATCH api/v1/users/me/
+```
+**Description** : Allows modifying your user object.
+
+**Auth required** : YES
+
+**Permissions required** : None
+
+
+### Parameters
+None
+
+**Example Response:**
+```json
+{
+    "id": 1,
+    "username": "johndoe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "bio": "This is my bio.",
+    "year": 2021,
+    "group": 1,
+}
+```
+
+---
+
 ## Groups
 ### Group Model:
 

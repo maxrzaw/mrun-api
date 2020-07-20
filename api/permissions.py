@@ -46,3 +46,4 @@ class IsOwnerAdminOrReadOnly(permissions.BasePermission):
             return request.auth != None
         
         return obj.owner == request.user or request.user.is_staff
+

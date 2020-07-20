@@ -7,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'year']
 
+class AdvancedUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'year', 'is_staff']
+
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +44,7 @@ class ActivitySummarySerializer(serializers.ModelSerializer):
     workout = WorkoutSerializer()
     class Meta:
         model = Activity
-        fields = ['id', 'user', 'workout_id', 'time', 'comment', 'workout']
+        fields = ['id', 'user', 'time', 'comment', 'workout']
     
     def create(self, validated_data):
         workout_data = validated_data.pop('workout')
@@ -51,7 +56,7 @@ class ActivitySummarySerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['id', 'user', 'workout_id', 'time', 'comment']
+        fields = ['id', 'user', 'workout', 'time', 'comment']
 
 class SuggestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,6 +70,7 @@ class SuggestionSummarySerializer(serializers.ModelSerializer):
         fields = ['id', 'workout_id', 'date', 'workout']
 
 class MembershipSerializer(serializers.ModelSerializer):
+    group = GroupSerializer()
     class Meta:
         model = Memberships
         fields = ['user', 'group']

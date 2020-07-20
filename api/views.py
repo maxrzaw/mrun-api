@@ -321,7 +321,7 @@ class WorkoutList(APIView):
         category = params.get("type", None)
 
         # Retrieve the workouts
-        workouts = Workout.objects.all().order_by('id') if category is None else Workout.objects.filter(category=category).order_by('id')
+        workouts = Workout.objects.filter(deleted=False).order_by('id') if category is None else Workout.objects.filter(category=category, deleted=False).order_by('id')
 
         # Create the paginator
         paginator = Paginator(workouts, per_page, allow_empty_first_page=True)
@@ -403,8 +403,8 @@ class WorkoutDetail(APIView):
 
         # Check permissions 
         self.check_object_permissions(request, workout)
-
-        workout.delete()
+        workout.deleted = True
+        workout.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -419,7 +419,6 @@ class ActivityList(APIView):
 
 
         if filter == "group":
-            print("Hello, World!")
             try: 
                 membership = Memberships.objects.get(user_id=request.user.id)
                 group = membership.group_id
@@ -486,6 +485,7 @@ class ActivityList(APIView):
                 raise Http404(serializer.errors)
         else:
             # Use the ActivitySerializer
+            print(data)
             serializer = ActivitySerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
@@ -541,6 +541,50 @@ class ActivityDetail(APIView):
         self.check_object_permissions(request, activity)
         activity.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ActivityComments(APIView):
+    """
+    API endpoint for getting comments on an activity.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, activity_id, format=None):
+        # Check that workout exists
+        # get pagnation params
+        # return list
+        params = request.query_params
+        page = int(params.get("page", 1)) # default page number is 1
+        per_page = int(params.get("per_page", 10)) # default per page is 10
+
+        # Check to make sure group is valid
+        if not Activity.objects.filter(id=activity_id).exists():
+            return Response(data={"detail": "Invalid activity id."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        comments = Comment.objects.filter(activity_id=activity_id)
+
+        paginator = Paginator(comments, per_page, allow_empty_first_page=True)
+
+
+        try:
+            # Get requested page
+            requested_page = paginator.page(page)
+        except InvalidPage:
+            raise Http404("Invalid Page")
+        # Serialize requested page and return
+        serializer = CommentSerializer(data=requested_page, many=True)
+        serializer.is_valid()
+
+        renderer = JSONRenderer()
+        comment_list = renderer.render(serializer.data).decode('utf-8')
+
+        data = {}
+        data["comments"] = json.loads(comment_list)
+        data["next"] = requested_page.next_page_number() if requested_page.has_next() else None
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
+
 
 
 class SuggestionView(APIView):
@@ -706,9 +750,18 @@ class Membership(APIView):
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, format=None):
+        # get query params and default to logged in user
+        params = request.query_params
+        user_id = params.get("user", request.user.id)
+
+        # get the User object
+        try:
+            user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist as err:
+            raise Http404(err)
         # get the entry of the logged in user
         try: 
-            membership = Memberships.objects.get(user_id=request.user.id)
+            membership = Memberships.objects.get(user_id=user.id)
             serializer = MembershipSerializer(membership)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist as error:
@@ -718,14 +771,31 @@ class CredentialCheck(APIView):
     """
     API endpoint for checking if authenticated.
     """
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def head(self, request, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class Me(APIView):
+    """
+    Returns the current logged in user.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        serializer = AdvancedUserSerializer(request.user)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, format=None):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
     
-    def post(self, request, format=None):
-        print(request.data)
-        return Response(data=request.data, status=status.HTTP_200_OK)
+
 
 
 
