@@ -1,6 +1,6 @@
 from rest_framework import viewsets # Don't want this later
 from rest_framework import permissions
-from api.permissions import CustomCommentPermission, IsAdminOrReadOnly, IsOwnerAdminOrReadOnly
+from api.permissions import CustomCommentPermission, IsAdminOrReadOnly, IsOwnerAdminOrReadOnly, IsUserAdminOrReadOnly
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
@@ -97,7 +97,7 @@ class UserActivities(APIView):
         except InvalidPage:
             raise Http404("Invalid page.")
         # Serialize requested page and return
-        serializer = ActivitySummarySerializer(requested_page, many=True)
+        serializer = ActivityFullSerializer(requested_page, many=True)
 
         renderer = JSONRenderer()
         activity_list = renderer.render(serializer.data).decode('utf-8')
@@ -128,7 +128,7 @@ class UserWorkouts(APIView):
             raise Http404(err)
 
         # Get the Workouts
-        workouts = Workout.objects.filter(owner=user_id).order_by('id') if workout_type is None else Workout.objects.filter(owner=user_id, category=workout_type).order_by('id')
+        workouts = Workout.objects.filter(owner=user_id, deleted=False).order_by('id') if workout_type is None else Workout.objects.filter(owner=user_id, category=workout_type, deleted=False).order_by('id')
         # Create the paginator
         paginator = Paginator(workouts, per_page, allow_empty_first_page=True)
         try:
@@ -187,7 +187,7 @@ class CommentList(APIView):
         data = request.data
         data["user"] = request.user.id
         
-        serializer = CommentSerializer(data=data)
+        serializer = CreateCommentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -416,6 +416,8 @@ class ActivityList(APIView):
         page = int(params.get("page", 1)) # default page number is 1
         per_page = int(params.get("per_page", 10)) # default per page is 10
         filter = params.get("filter", None)
+        sort = params.get("sort", "desc") # default is descending
+        sort = '-time' if sort == "desc" else 'time'
 
 
         if filter == "group":
@@ -428,19 +430,20 @@ class ActivityList(APIView):
                 for m in results:
                     users.append(m.user_id)
                 
-                activities = Activity.objects.filter(user__in=users).order_by('time')
+                activities = Activity.objects.filter(user__in=users).order_by(sort)
             except ObjectDoesNotExist as error:
                 return Response(data={"detail": "User not in group."}, status=status.HTTP_400_BAD_REQUEST)
 
         elif filter is None:
-            activities = Activity.objects.all().order_by('time')
+            activities = Activity.objects.all().order_by(sort)
             
         else:
-            all_activities = Activity.objects.select_related('workout')
+            all_activities = Activity.objects.select_related('workout').order_by(sort)
             activities = list()
             for a in all_activities:
                 if a.workout.category == filter:
                     activities.append(a)
+
         paginator = Paginator(activities, per_page, allow_empty_first_page=True)
 
         try:
@@ -449,7 +452,8 @@ class ActivityList(APIView):
         except InvalidPage:
             raise Http404("Invalid Page")
         # Serialize requested page and return
-        serializer = ActivitySummarySerializer(data=requested_page, many=True)
+        serializer = ActivityFullSerializer(data=requested_page, many=True)
+        #serializer = ActivitySummarySerializer(data=requested_page, many=True)
         serializer.is_valid()
 
         renderer = JSONRenderer()
@@ -485,7 +489,6 @@ class ActivityList(APIView):
                 raise Http404(serializer.errors)
         else:
             # Use the ActivitySerializer
-            print(data)
             serializer = ActivitySerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
@@ -498,7 +501,7 @@ class ActivityDetail(APIView):
     """
     API endpoint for viewing and editing activities.
     """
-    permission_classes = [IsOwnerAdminOrReadOnly]
+    permission_classes = [IsUserAdminOrReadOnly]
 
     def get(self, request, activity_id, format=None):
         try:
@@ -509,7 +512,7 @@ class ActivityDetail(APIView):
         
         # Check permission
         self.check_object_permissions(request, activity)
-        serializer = ActivitySummarySerializer(activity)
+        serializer = ActivityFullSerializer(activity)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -562,7 +565,7 @@ class ActivityComments(APIView):
         if not Activity.objects.filter(id=activity_id).exists():
             return Response(data={"detail": "Invalid activity id."}, status=status.HTTP_400_BAD_REQUEST)
         
-        comments = Comment.objects.filter(activity_id=activity_id)
+        comments = Comment.objects.filter(activity_id=activity_id).order_by('id')
 
         paginator = Paginator(comments, per_page, allow_empty_first_page=True)
 
@@ -698,7 +701,6 @@ class Register(APIView):
         
         # Check to make sure passwords match
         if data["password1"] != data["password2"]:
-            print(data)
             return Response(data='{ "detail": "passwords must match." }', status=status.HTTP_403_FORBIDDEN)
 
         try:
@@ -740,12 +742,13 @@ class Membership(APIView):
             entry = Memberships.objects.get(user_id=user_id)
             entry.group_id = group_id
             entry.save()
-            return Response(status=status.HTTP_201_CREATED)
+            serializer = MembershipSerializer(entry)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             serializer = MembershipSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(status=status.HTTP_201_CREATED)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

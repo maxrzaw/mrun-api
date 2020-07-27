@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 
 # Create your models here.
 YEAR_IN_SCHOOL_CHOICES = [
@@ -60,7 +61,7 @@ class Workout(models.Model):
 class Activity(models.Model):
     user = models.ForeignKey('api.User', on_delete=models.CASCADE)
     workout = models.ForeignKey('api.Workout', on_delete=models.PROTECT)
-    time = models.DateTimeField(auto_now_add=True, editable=False)
+    time = models.DateTimeField(default=datetime.now, blank=False)
     comment = models.TextField(default='')
 
 class Suggestion(models.Model):

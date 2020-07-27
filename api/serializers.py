@@ -30,9 +30,16 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserSummarySerializer()
     class Meta:
         model = Comment
         fields = ['id', 'user', 'activity', 'time', 'text']
+
+class CreateCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'activity', 'text']
+
 
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,6 +58,13 @@ class ActivitySummarySerializer(serializers.ModelSerializer):
         workout = Workout.objects.create(**workout_data)
         activity = Activity.objects.create(workout=workout, **validated_data)
         return activity
+
+class ActivityFullSerializer(serializers.ModelSerializer):
+    workout = WorkoutSerializer()
+    user = UserSummarySerializer()
+    class Meta:
+        model = Activity
+        fields = ['id', 'user', 'time', 'comment', 'workout']
 
 
 class ActivitySerializer(serializers.ModelSerializer):
