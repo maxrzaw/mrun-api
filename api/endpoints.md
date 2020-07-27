@@ -83,7 +83,6 @@ GET api/v1/users/{user_id}/
     "last_name": "Doe",
     "bio": "This is my bio.",
     "year": 2021,
-    "group": 1,
 }
 ```
 
