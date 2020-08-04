@@ -1,4 +1,4 @@
-"""MRun_Alpha URL Configuration
+"""mrun_api URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from MRun_Alpha import views
+from mrun_api import views
 
 
 # Wire up our API using automatic URL routing.

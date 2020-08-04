@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model, logout
 User = get_user_model()
 
 from django.contrib.auth import login, authenticate
-from MRun_Alpha.forms import SignUpForm
+from mrun_api.forms import SignUpForm
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
