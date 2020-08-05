@@ -89,3 +89,14 @@ class MembershipSerializer(serializers.ModelSerializer):
         model = Memberships
         fields = ['user', 'group']
 
+class NewMembershipSerializer(serializers.ModelSerializer):
+    group = serializers.PrimaryKeyRelatedField(many=False, read_only=False, queryset=Group.objects)
+
+
+    class Meta:
+        model = Memberships
+        fields = ['user', 'group']
+
+    def create(self, validated_data):
+
+        return super().create(validated_data)

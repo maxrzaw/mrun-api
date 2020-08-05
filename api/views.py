@@ -735,8 +735,7 @@ class Membership(APIView):
         if not Group.objects.filter(id=group_id).exists():
             return Response(data={"detail": "Invalid group id."}, status=status.HTTP_400_BAD_REQUEST)
 
-
-        data = { "group": group_id, "user": user_id }
+        
         # Check if the user already has a group
         if Memberships.objects.filter(user_id=user_id).exists():
             entry = Memberships.objects.get(user_id=user_id)
@@ -745,10 +744,15 @@ class Membership(APIView):
             serializer = MembershipSerializer(entry)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
-            serializer = MembershipSerializer(data=data)
+            data = { "group": group_id, "user": user_id }
+            serializer = NewMembershipSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(data=serializer.data, status=status.HTTP_200_OK)
+                group = Group.objects.get(id=group_id)
+                cereal = GroupSerializer(group)
+                data = {'user': user_id, 'group': cereal.data}
+
+                return Response(data=data, status=status.HTTP_200_OK)
             else:
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
