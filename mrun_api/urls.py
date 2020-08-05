@@ -25,9 +25,6 @@ from mrun_api import views
 urlpatterns = [
     path('api/v1/', include('api.urls'), name='api-root'),
     path('admin/', admin.site.urls),
-    url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^logout/$', views.logout_view, name='logout'),
-    url(r'^signup/$', views.signup, name='signup'),
 ]
 
 
