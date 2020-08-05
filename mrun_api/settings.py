@@ -25,7 +25,7 @@ SECRET_KEY = 'f_*z#ttye1^poxiwp0rspu3ha7*xpc_+94z56xl&urb_+g&l_1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['192.168.1.15', 'localhost', '10.0.0.234', '68.36.65.3']
+ALLOWED_HOSTS = ['192.168.1.15', 'localhost', '10.0.0.234', '18.191.216.207', 'api.maxzawisa.com']
 
 
 # Application definition
