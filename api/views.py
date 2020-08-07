@@ -12,11 +12,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
+from django.shortcuts import render
 import json
 import datetime
 import django.contrib.auth.password_validation as password_validation
 from rest_framework.authtoken.models import Token
 User = get_user_model()
+
+def index(request):
+    return render(request, 'api/index.html')
 
 class UserList(APIView):
     """

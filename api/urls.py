@@ -45,6 +45,7 @@ urlpatterns = [
     path('membership/', views.Membership.as_view(), name='membership'),
     path('credential-check/', views.CredentialCheck.as_view(), name='credential-check'),
     path('me/', views.Me.as_view(), name='me'),
+    path('', views.index, name='api-index'),
 ]
 
 
