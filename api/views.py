@@ -424,6 +424,7 @@ class ActivityList(APIView):
         sort = '-time' if sort == "desc" else 'time'
 
 
+
         if filter == "group":
             try: 
                 membership = Memberships.objects.get(user_id=request.user.id)
@@ -776,7 +777,11 @@ class Membership(APIView):
             serializer = MembershipSerializer(membership)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist as error:
-            return Response(data={"detail": "User not in group."}, status=status.HTTP_400_BAD_REQUEST)
+            # Lets return group 0
+            group = Group.objects.get(id=0)
+            cereal = GroupSerializer(group)
+            data = {'user': user_id, 'group': cereal.data}
+            return Response(data=data, status=status.HTTP_200_OK)
 
 class CredentialCheck(APIView):
     """
