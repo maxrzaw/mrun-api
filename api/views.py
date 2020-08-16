@@ -621,11 +621,15 @@ class SuggestionView(APIView):
 
     def post(self, request, format=None):
         data = request.data
+        if Suggestion.objects.filter(group=data['group'], date=data['date']).exists():
+            print('Hi')
+            return Response(data='{ "detail": "Suggestion already exists on this day and group." }', status=status.HTTP_409_CONFLICT)
         serializer = SuggestionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
+            print(serializer.errors)
             raise Http404(serializer.errors)
 
 class SuggestionDetail(APIView):
@@ -777,8 +781,8 @@ class Membership(APIView):
             serializer = MembershipSerializer(membership)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist as error:
-            # Lets return group 0
-            group = Group.objects.get(id=0)
+            # Lets return group 1
+            group = Group.objects.get(id=1)
             cereal = GroupSerializer(group)
             data = {'user': user_id, 'group': cereal.data}
             return Response(data=data, status=status.HTTP_200_OK)
