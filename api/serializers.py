@@ -81,7 +81,7 @@ class SuggestionSummarySerializer(serializers.ModelSerializer):
     workout = WorkoutSerializer()
     class Meta:
         model = Suggestion
-        fields = ['id', 'workout_id', 'date', 'workout']
+        fields = ['id', 'workout_id', 'group', 'date', 'workout']
 
 class MembershipSerializer(serializers.ModelSerializer):
     group = GroupSerializer()

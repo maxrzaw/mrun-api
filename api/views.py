@@ -604,20 +604,31 @@ class SuggestionView(APIView):
     def get(self, request, format=None):
         params = request.query_params
         # default group of 1
-        group = params.get("group", 1)
+        group = params.get("group", 'all')
         # default date of today
         date = params.get("date", datetime.date.today())
-        
-        try:
-            # Get the workout
-            suggestion = Suggestion.objects.select_related('workout').get(group_id=group, date=date)
-        except ObjectDoesNotExist as err:
-            raise Http404(err)
 
-        # convert to a workout
-        workout = suggestion.workout
-        serializer = WorkoutSerializer(workout)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        if group == 'all':
+            try:
+                # Get the workout
+                suggestions = Suggestion.objects.select_related('workout').filter(date=date)
+            except ObjectDoesNotExist as err:
+                raise Http404(err)
+            # convert to a workout
+            serializer = SuggestionSummarySerializer(suggestions, many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            try:
+                # Get the workout
+                suggestion = Suggestion.objects.select_related('workout').get(group_id=group, date=date)
+            except ObjectDoesNotExist as err:
+                raise Http404(err)
+            # convert to a workout
+            workout = suggestion.workout
+            serializer = WorkoutSerializer(workout)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 
     def post(self, request, format=None):
         data = request.data
