@@ -1,5 +1,7 @@
 # API Endpoints
+
 ## Table of Contents
+
 - [Users](#users)
 - [Groups](#groups)
 - [Workouts](#workouts)
@@ -7,7 +9,9 @@
 - [Comments](#comments)
 - [Suggestions](#suggestions)
 - [Memberships](#memberships)
+
 ## Users
+
 ### User Model:
 
 | Name | Type | Description |
@@ -25,6 +29,7 @@
 ```python
 GET api/v1/users/
 ```
+
 **Description** : Returns a list of User objects
 
 **Auth required** : YES
@@ -32,12 +37,14 @@ GET api/v1/users/
 **Permissions required** : None
 
 ### Parameters
+
 |  Name | Required |            Description            | Default | Example |
 |:------|:--------:|:----------------------------------|:-------:|:-------:|
-| group | No       | Filter by group id                | None    | `group=1`     |
+| group | No       | Filter by group id                | None    | `group=1`    |
 | year  | No       | Filter by graduation year         | None    | `year=2021`  |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -66,6 +73,7 @@ GET api/v1/users/
 ```python
 GET api/v1/users/{user_id}/
 ```
+
 **Description** : Returns user object with `user_id`
 
 **Auth required** : YES
@@ -75,6 +83,7 @@ GET api/v1/users/{user_id}/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -91,6 +100,7 @@ GET api/v1/users/{user_id}/
 ```python
 GET api/v1/users/{user_id}/activities/
 ```
+
 **Description** : Returns a list of Activity summaries for the specified user.
 
 **Auth required** : YES
@@ -98,6 +108,7 @@ GET api/v1/users/{user_id}/activities/
 **Permissions required** : Signed in
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  type    | No       | Returns activities of specified type. | None    | `type=T`      |
@@ -106,6 +117,7 @@ GET api/v1/users/{user_id}/activities/
 | sort     | No       | Sort by date ascending or descending. | desc    | `sort=asc`    |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -144,6 +156,7 @@ GET api/v1/users/{user_id}/activities/
 ```python
 GET api/v1/users/{user_id}/workouts/
 ```
+
 **Description** : Returns a list of workouts for specified user.
 
 **Auth required** : YES
@@ -153,6 +166,7 @@ GET api/v1/users/{user_id}/workouts/
 [//]: # (Might change this to following later on)
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
@@ -160,6 +174,7 @@ GET api/v1/users/{user_id}/workouts/
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -184,17 +199,19 @@ GET api/v1/users/{user_id}/workouts/
 ```python
 GET api/v1/users/me/
 ```
+
 **Description** : Returns logged in user.
 
 **Auth required** : YES
 
 **Permissions required** : None
 
-
 ### Parameters
+
 None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -212,17 +229,19 @@ None
 ```python
 PATCH api/v1/users/me/
 ```
+
 **Description** : Allows modifying your user object.
 
 **Auth required** : YES
 
 **Permissions required** : None
 
-
 ### Parameters
+
 None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -251,6 +270,7 @@ None
 ```python
 GET api/v1/groups/
 ```
+
 **Description** : Returns a list of group objects
 
 **Auth required** : YES
@@ -260,6 +280,7 @@ GET api/v1/groups/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 [
     {
@@ -280,6 +301,7 @@ GET api/v1/groups/
 ```python
 POST api/v1/groups/
 ```
+
 **Description** : Create a group
 
 **Auth required** : YES
@@ -293,6 +315,7 @@ POST api/v1/groups/
 ```python
 PATCH api/v1/groups/{group_id}/
 ```
+
 **Description** : Modify a group
 
 **Auth required** : YES
@@ -306,6 +329,7 @@ PATCH api/v1/groups/{group_id}/
 ```python
 DELETE api/v1/groups/{group_id}/
 ```
+
 **Description** : Removes a group
 
 **Auth required** : YES
@@ -319,6 +343,7 @@ DELETE api/v1/groups/{group_id}/
 ```python
 GET api/v1/groups/{group_id}/members/
 ```
+
 **Description** : Returns a list of User objects
 
 **Auth required** : YES
@@ -328,12 +353,14 @@ GET api/v1/groups/{group_id}/members/
 [//]: # (Might change this to following later on)
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
 | per_page | No       | Results per page.                     |  10     | `per_page=10` |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -360,7 +387,9 @@ GET api/v1/groups/{group_id}/members/
 ---
 
 ## Workouts
+
 ### Workout Model:
+
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | integer | Unique workout identifier. |
@@ -373,6 +402,7 @@ GET api/v1/groups/{group_id}/members/
 ```python
 GET api/v1/workouts/
 ```
+
 **Description** : Returns a list of Workout objects
 
 **Auth required** : YES
@@ -380,6 +410,7 @@ GET api/v1/workouts/
 **Permissions required** : None
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
@@ -387,6 +418,7 @@ GET api/v1/workouts/
 |  type    | No       | Returns workouts of specified type.   | None    | `type=1`      |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -411,6 +443,7 @@ GET api/v1/workouts/
 ```python
 POST api/v1/workouts/
 ```
+
 **Description** : Creates a new workout
 
 **Auth required** : YES
@@ -424,6 +457,7 @@ POST api/v1/workouts/
 ```python
 GET api/v1/workouts/{workout_id}/
 ```
+
 **Description** : Returns a Workout object
 
 **Auth required** : YES
@@ -433,6 +467,7 @@ GET api/v1/workouts/{workout_id}/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -448,6 +483,7 @@ GET api/v1/workouts/{workout_id}/
 ```python
 DELETE api/v1/workouts/{workout_id}/
 ```
+
 **Description** : Deletes a workout
 
 **Auth required** : YES
@@ -461,6 +497,7 @@ DELETE api/v1/workouts/{workout_id}/
 ```python
 PATCH api/v1/workouts/{workout_id}/
 ```
+
 **Description** : Modifies a Workout
 
 **Auth required** : YES
@@ -470,6 +507,7 @@ PATCH api/v1/workouts/{workout_id}/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -483,7 +521,9 @@ PATCH api/v1/workouts/{workout_id}/
 ---
 
 ## Activities
+
 ### Activity Model:
+
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | integer | unique key for every Activity. |
@@ -495,6 +535,7 @@ PATCH api/v1/workouts/{workout_id}/
 ```python
 POST api/v1/activities/
 ```
+
 **Description** : Creates a new activity for the logged in user
 
 **Auth required** : YES
@@ -502,6 +543,7 @@ POST api/v1/activities/
 **Permissions required** : None
 
 ### Parameters
+
 |    Name     | Required |                    Description                  | Default |    Example    |
 |:------------|:--------:|:------------------------------------------------|:-------:|:-------------:|
 | new_workout |   No     | Indicates if a new workout needs to be created. | 0       | `new_workout=1`      |
@@ -511,6 +553,7 @@ POST api/v1/activities/
 ```python
 GET api/v1/activities/
 ```
+
 **Description** : Returns a list of Activity summaries.
 
 **Auth required** : YES
@@ -518,6 +561,7 @@ GET api/v1/activities/
 **Permissions required** : None
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
@@ -525,6 +569,7 @@ GET api/v1/activities/
 | filter   | No       | Criteria to filter on ("group" or the workout type) | None | `filter=group` |
 
 **Example Response:**
+
 ```json
 [
     {
@@ -563,6 +608,7 @@ GET api/v1/activities/
 ```python
 GET api/v1/activities/{activity_id}/
 ```
+
 **Description** : Returns an Activity object
 
 **Auth required** : YES
@@ -572,6 +618,7 @@ GET api/v1/activities/{activity_id}/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -587,6 +634,7 @@ GET api/v1/activities/{activity_id}/
 ```python
 DELETE api/v1/activities/{activity_id}/
 ```
+
 **Description** : Deletes an Activity object
 
 **Auth required** : YES
@@ -600,6 +648,7 @@ DELETE api/v1/activities/{activity_id}/
 ```python
 GET api/v1/activities/{activity_id}/comments/
 ```
+
 **Description** : Returns a list of Comment objects associated with specified activity.
 
 **Auth required** : YES
@@ -609,6 +658,7 @@ GET api/v1/activities/{activity_id}/comments/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 [
     {
@@ -631,7 +681,9 @@ GET api/v1/activities/{activity_id}/comments/
 ---
 
 ## Comments
+
 ### Comment Model:
+
 | Name | Type | Description |
 |:-----|:----:|:------------|
 | id | integer | unique key for each comment.|
@@ -643,6 +695,7 @@ GET api/v1/activities/{activity_id}/comments/
 ```python
 GET api/v1/comments/
 ```
+
 **Description** : Returns a list of comment objects. If there is a next page, then "next" will contain it, otherwise "next" will not exist.
 
 **Auth required** : YES
@@ -650,6 +703,7 @@ GET api/v1/comments/
 **Permissions required** : None
 
 ### Parameters
+
 |  Name    | Required |              Description              | Default |    Example    |
 |:---------|:--------:|:--------------------------------------|:-------:|:-------------:|
 |  page    | No       | Page number.                          | 1       | `page=1`      |
@@ -657,6 +711,7 @@ GET api/v1/comments/
 |  user    | No       | Returns comments of only one user.    | None    | `user=1`      |
 
 **Example Response:**
+
 ```json
 {
     "comments": [
@@ -685,6 +740,7 @@ GET api/v1/comments/
 ```python
 POST api/v1/comments/
 ```
+
 **Description** : Creates a Comment object
 
 **Auth required** : YES
@@ -694,6 +750,7 @@ POST api/v1/comments/
 **Parameters:** None
 
 **Example:**
+
 ```bash
 curl --header "Content-type: application/json" \
   --request POST \
@@ -706,6 +763,7 @@ curl --header "Content-type: application/json" \
 ```python
 PATCH api/v1/comments/{comment_id}/
 ```
+
 **Description** : Modifies a Comment object
 
 **Auth required** : YES
@@ -715,6 +773,7 @@ PATCH api/v1/comments/{comment_id}/
 **Parameters:** None
 
 **Example:**
+
 ```bash
 curl --header "Content-type: application/json" \
   --request PATCH \
@@ -723,6 +782,7 @@ curl --header "Content-type: application/json" \
 ```
 
 **Example Response:**
+
 ```json
 {
     "id": 01,
@@ -738,6 +798,7 @@ curl --header "Content-type: application/json" \
 ```python
 DELETE api/v1/comments/{comment_id}/
 ```
+
 **Description** : Deletes a Comment object
 
 **Auth required** : YES
@@ -748,6 +809,7 @@ DELETE api/v1/comments/{comment_id}/
 
 
 ## Suggestions
+
 ### Suggestion Model:
 
 | Name |  Type   | Description |
@@ -760,6 +822,7 @@ DELETE api/v1/comments/{comment_id}/
 ```python
 GET api/v1/suggestions/
 ```
+
 **Description** : Returns the suggested workout for the given date and group.
 
 **Auth required** : YES
@@ -767,12 +830,14 @@ GET api/v1/suggestions/
 **Permissions required** : None
 
 ### Parameters
+
 |  Name  | Required |              Description              | Default |    Example    |
 |:-------|:--------:|:--------------------------------------|:-------:|:-------------:|
 | group  | No       | group_id of the group                 | 1       | `group=1`      |
 |  date  | No       | Date of the suggestion                |  today  | `date=2020-07-14` |
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -788,6 +853,7 @@ GET api/v1/suggestions/
 ```python
 POST api/v1/suggestions/
 ```
+
 **Description** : Returns the suggested workout for the given date and group.
 
 **Auth required** : YES
@@ -797,6 +863,7 @@ POST api/v1/suggestions/
 **Parameters:** None
 
 **Example Request:**
+
 ```json
 {
     "group": 1,
@@ -812,6 +879,7 @@ POST api/v1/suggestions/
 ```python
 GET api/v1/suggestions/{suggestion_id}/
 ```
+
 **Description:** Returns the suggestion object with a summary of the workout.
 
 **Auth required:** YES
@@ -821,6 +889,7 @@ GET api/v1/suggestions/{suggestion_id}/
 **Parameters:** None
 
 **Example Response:**
+
 ```json
 {
     "id": 1,
@@ -842,6 +911,7 @@ GET api/v1/suggestions/{suggestion_id}/
 ```python
 DELETE api/v1/suggestions/{suggestion_id}/
 ```
+
 **Description:** Deletes the suggestion object with suggestion_id.
 
 **Auth required:** YES
@@ -855,6 +925,7 @@ DELETE api/v1/suggestions/{suggestion_id}/
 ---
 
 ## Memberships
+
 ### Membership Model:
 
 | Name |  Type   | Description |
@@ -868,6 +939,7 @@ user_id must be unique across all membership entries.
 ```python
 POST api/v1/membership/
 ```
+
 **Description:** Allows users to update their membership status. Will overwrite existing entry if exists.
 
 **Auth required:** YES
@@ -875,6 +947,7 @@ POST api/v1/membership/
 **Permissions required:** None
 
 ### Parameters:
+
 |  Name | Required |              Description              |  Example    |
 |:------|:--------:|:--------------------------------------|:-----------:|
 | group |  yes     | The group_id for the group you would like to join. | `group=3` |
@@ -890,6 +963,7 @@ POST api/v1/membership/
 ```python
 GET api/v1/membership/
 ```
+
 **Description:** Returns the group_id for the logged in user.
 
 **Auth required:** YES
@@ -906,9 +980,11 @@ GET api/v1/membership/
 | 403 | not authenticated |
 
 **Success Response:**
+
 ```json
 {
     "user": 1,
     "group": 1,
 }
 ```
+
